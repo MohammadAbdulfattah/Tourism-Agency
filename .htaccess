@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /darrebni/mvc/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?id=1 [L,QSA]
+AddType application/x-httpd-php .html .htm
