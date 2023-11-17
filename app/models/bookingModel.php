@@ -67,7 +67,12 @@ class BookingModel
         $this->db->Where('ticket_id',$ticket_id);
         return $this->db->update('booking', $data);
     }
-    public function editBookingHotel($data,$hotelName)
+    public function editBookingByDate($data,$date)
+    {
+        $this->db->Where('date',$date);
+        return $this->db->update('booking', $data);
+    }
+    public function editBookingByHotel($data,$hotelName)
     {
         $hotels = $this->db->get('hotels');
         foreach ($hotels as $hotel) {

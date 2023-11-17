@@ -79,5 +79,3 @@ class HotelsModel
         $this->db->delete('hotels');
     }
 }
-
-
