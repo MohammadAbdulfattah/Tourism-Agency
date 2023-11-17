@@ -77,6 +77,7 @@ class AdminsControllers{
                 'email' => $email,
                 'password' => $password,
             ];}
+        // validation check
         if($this->checkForValidEmail($email)){
             if($this->checkPasswordLength($password)){
                 $this->model->addAdmins($data);
