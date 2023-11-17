@@ -11,6 +11,17 @@ class HotelsController
     {
         return $this->model->getAllHotels();
     }
+    public function getHotelsBySpcInfo()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $conditions = array();
+            foreach ($_POST as $key => $value) {
+                $condition = "$key = $value";
+                array_push($conditions, $condition);
+            }
+            return $this->model->getHotelBySpcInfo($conditions);
+        }
+    }
     public function getHotelByID($id)
     {
         return $this->model->getHotelsByID($id);
