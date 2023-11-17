@@ -13,7 +13,7 @@
         public function getAdminsById($id) {
             return $this->db->where('id', $id)->getOne('admins');
         }
-    
+
         public function updateAdmins($id, $data) {
             $this->db->where('id', $id);
             return $this->db->update('admins', $data);
@@ -22,6 +22,13 @@
         public function deleteAdmins($id) {
             $this->db->where('id', $id);
             return $this->db->delete('admins');
+        }
+
+        public function searchAdmins($email,$password) {
+            $this->db->where ('email', $email);
+            $this->db->where ('password', $password);
+            $results = $this->db->get ('admins');
+            return $results;
         }
     }
 ?>
