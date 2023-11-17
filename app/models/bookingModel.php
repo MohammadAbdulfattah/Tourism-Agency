@@ -10,6 +10,24 @@ class BookingModel
     {
         return $this->db->get('booking');
     }
+    public function getBookingBySpcInfo()
+    {
+        //condition : column = condition;
+        // if the value is string do not forget to put ''
+        $sql = '';
+        if (!empty($conditions)) {
+            for ($i = 0; $i < count($conditions); $i++) {
+                $sql .= $conditions[$i];
+                for ($j = 0; $j <= $i; $j++) {
+                    $sql .= ' AND ';
+                    break;
+                }
+            }
+        }
+        $sql = rtrim($sql, 'AND ');
+        $query = "SELECT * FROM booking WHERE " . $sql;
+        return $this->db->rawQuery($query);
+    }
     public function getBookingByID($id){
         $this->db->Where('id', $id);
         return $this->db->get('booking');
