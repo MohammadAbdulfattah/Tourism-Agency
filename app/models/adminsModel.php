@@ -23,7 +23,7 @@
             $this->db->where('id', $id);
             return $this->db->delete('admins');
         }
-
+        //check for email and password
         public function searchAdmins($email,$password) {
             $this->db->where ('email', $email);
             $this->db->where ('password', $password);
