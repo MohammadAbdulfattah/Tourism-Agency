@@ -1,29 +1,41 @@
 <?php
 namespace app\models;
-Class citiesModel{
+
+Class customersModel{
     private $db;
-    public function __construct($db){
+    public function __construct($db)
+    {
         $this->db=$db;
     }
-    public function addCity($data){
-        return $this->db->insert('cities',$data);
+    public function addCustomer($data)
+    {
+        return $this->db->insert('customers',$data);
     }
-    public function getCity(){
-        return $this->db->get('cities');
+    public function getCustomer()
+    {
+        return $this->db->get('custoners');
     }
-    public function getCityByid($id){
-        return $this->db->where('id',$id)->getOne('cities');
+    public function getCustomerByid($id)
+    {
+        return $this->db->where('id',$id)->getOne('customers');
     }
-    public function updateCity($id,$update){
+    // public function getCustomerByname($name)
+    // {
+    //     return $this->db->where('name',$name)->getOne('customers');
+    // }
+    public function searchCustomer($condition){
+        $this->db->where('name',$condition,'LIKE');
+        return $this->db->get('customers');
+    }
+    public function updateCustomer($id,$update)
+    {
         $this->db->where('id',$id);
-        return $this->db->update('cities',$update);
+        return $this->db->update('customers',$update);
     }
-    public function deleteCity($id){
-        $this->db->where('id',$id); 
-        return $this->db->delete('cities');
-    }
-    public function searchCity($condition){
-        $this->db->wehre('name',$condition,'LIKE');
-        return $this->db->get($condition);
+    public function deleteCustomer($id)
+    {
+        $this->db->where('id',$id);
+        return $this->db->delete('customers');
     }
 }
+?>
