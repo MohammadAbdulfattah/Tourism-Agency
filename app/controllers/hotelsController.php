@@ -1,4 +1,4 @@
-<?php
+9<?php
 class HotelsController
 {
     private $model;
@@ -7,36 +7,66 @@ class HotelsController
     {
         $this->model = $model;
     }
-    public function index()
+    public function allHotels()
     {
-        return $this->model->getAllHotels();
+        if ($hotels = $this->model->getAllHotels()) {
+            echo json_encode(array('status' => 'true', 'data' => $hotels));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/hotelsView.php";
     }
     public function getHotelsBySpcInfo()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conditions = array();
             foreach ($_POST as $key => $value) {
-                $condition = "$key = $value";
+                $condition = "$key = '$value'";
                 array_push($conditions, $condition);
             }
-            return $this->model->getHotelBySpcInfo($conditions);
+            if ($hotels = $this->model->getHotelBySpcInfo($conditions)) {
+                echo json_encode(array('status' => 'true', 'data' => $hotels));
+            } else {
+                echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+            }
+            include "app/views/hotelInfo.php";
         }
     }
     public function getHotelByID($id)
     {
-        return $this->model->getHotelsByID($id);
+        if ($hotels = $this->model->getHotelsByID($id)) {
+            echo json_encode(array('status' => 'true', 'data' => $hotels));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/hotelInfo.php";
     }
     public function getHotelsByPhone($phone)
     {
-        $bookings = $this->model->getHotelByPhone($phone);
+        if ($hotels = $this->model->getHotelByPhone($phone)) {
+            echo json_encode(array('status' => 'true', 'data' => $hotels));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/hotelsView.php";
     }
     public function getHotelsByCity($cityName)
     {
-        return $this->model->getHotelsByCity($cityName);
+        if ($hotels = $this->model->getHotelsByCity($cityName)) {
+            echo json_encode(array('status' => 'true', 'data' => $hotels));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/hotelsView.php";
     }
     public function getHotelByName($name)
     {
-        $bookings = $this->model->getHotelByName($name);
+        if ($hotels = $this->model->getHotelByName($name)) {
+            echo json_encode(array('status' => 'true', 'data' => $hotels));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/hotelsView.php";
     }
     public function addHotel()
     {
@@ -52,7 +82,7 @@ class HotelsController
 
             if ($this->model->addHotel($data)) {
                 echo "Hotel added successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
+                header("REFRESH:0 ; URL=" . BASE_PATH);
             } else {
                 echo "Failed to add hotel.";
             }
@@ -70,12 +100,19 @@ class HotelsController
                 'phone' => $phone,
                 'city_id' => $city_id
             ];
-            if ($this->model->editHotelByID($data, $_GET['id'])) {
-                echo "Hotel info edited successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-
+            if (isset($_GET['id'])) {
+                if ($this->model->editHotelByID($data, $_GET['id'])) {
+                    echo "Hotel info edited successfully!";
+                    header("REFRESH:0 ; URL=" . BASE_PATH . 'edit');
+                } else {
+                    echo "Failed to edit hotel.";
+                }
             } else {
-                echo "Failed to edit hotel.";
+?>
+                <script>
+                    alert("no ID provided to edit hotel !!")
+                </script>
+            <?php
             }
         }
     }
@@ -91,12 +128,19 @@ class HotelsController
                 'phone' => $phone,
                 'city_id' => $city_id
             ];
-            if ($this->model->editHotelByName($data, $_GET['name'])) {
-                echo "Hotel info edited successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-
+            if (isset($_GET['name'])) {
+                if ($this->model->editHotelByName($data, $_GET['name'])) {
+                    echo "Hotel info edited successfully!";
+                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                } else {
+                    echo "Failed to edit hotel.";
+                }
             } else {
-                echo "Failed to edit hotel.";
+            ?>
+                <script>
+                    alert("no hotel name provided to edit hotel !!")
+                </script>
+            <?php
             }
         }
     }
@@ -112,13 +156,19 @@ class HotelsController
                 'phone' => $phone,
                 'city_id' => $city_id
             ];
-            var_dump($_GET);
-            if ($this->model->editHotelByPhone($data, $_GET['phone'])) {
-                echo "Hotel info edited successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-
+            if (isset($_GET['phone'])) {
+                if ($this->model->editHotelByPhone($data, $_GET['phone'])) {
+                    echo "Hotel info edited successfully!";
+                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                } else {
+                    echo "Failed to edit hotel.";
+                }
             } else {
-                echo "Failed to edit hotel.";
+            ?>
+                <script>
+                    alert("no phone number provided to edit hotel !!")
+                </script>
+            <?php
             }
         }
     }
@@ -134,23 +184,64 @@ class HotelsController
                 'phone' => $phone,
                 'city_id' => $city_id
             ];
-            var_dump($_GET);
-            if ($this->model->editHotelByCity($data, $_GET['cityName'])) {
-                echo "Hotel info edited successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-
+            if (isset($_GET['cityName'])) {
+                if ($this->model->editHotelByCity($data, $_GET['cityName'])) {
+                    echo "Hotel info edited successfully!";
+                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                } else {
+                    echo "Failed to edit hotel.";
+                }
             } else {
-                echo "Failed to edit hotel.";
+            ?>
+                <script>
+                    alert("no City name provided to edit hotel !!")
+                </script>
+            <?php
             }
         }
     }
-    public function deleteHotel($id)
+    public function deleteHotel()
     {
-        $this->model->deleteHotel($_GET['id']);
-    }
-    public function deleteHotelByCity($cityName)
-    {
+        if (isset($_GET['id'])) {
+            $this->model->deleteHotel($_GET['id'])
 
-        $this->model->deleteHotelByItsCity($_GET['cityName']);
+            ?>
+            <script>
+                alert("Hotel data has been deleted successfully");
+            </script>
+        <?php
+            header("REFRESH:0 ; URL=" . BASE_PATH);
+        } else {
+        ?>
+            <script>
+                alert("no ID provided to delete hotel !!")
+            </script>
+            <?php
+        }
+    }
+    public function deleteHotelByCity()
+    {
+        if (isset($_GET['cityName'])) {
+            if ($this->model->deleteHotelByItsCity($_GET['cityName'])) {
+            ?>
+                <script>
+                    alert("Hotel data has been deleted successfully");
+                </script>
+            <?php
+                header("REFRESH:0 ; URL=" . BASE_PATH);
+            } else {
+            ?>
+                <script>
+                    alert("there is something wrong please try again!!")
+                </script>
+            <?php
+            }
+        } else {
+            ?>
+            <script>
+                alert("no ID provided to delete hotel !!")
+            </script>
+<?php
+        }
     }
 }

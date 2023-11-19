@@ -7,40 +7,75 @@ class BookingController
     {
         $this->model = $model;
     }
-    public function index()
+    public function allBookings()
     {
-        $bookings = $this->model->getAllBooking();
+        if ($bookings = $this->model->getAllBooking()) {
+            echo json_encode(array('status' => 'true', 'data' => $bookings));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/bookingsView.php";
     }
-    public function getHotelsBySpcInfo()
+    public function getBookingBySpcInfo()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conditions = array();
             foreach ($_POST as $key => $value) {
-                $condition = "$key = $value";
+                $condition = "$key = '$value'";
                 array_push($conditions, $condition);
             }
-            return $this->model->getHotelBySpcInfo($conditions);
+            if (            $bookings = $this->model->getBookingBySpcInfo($conditions)) {
+                echo json_encode(array('status' => 'true', 'data' => $bookings));
+            } else {
+                echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+            }
+            include "app/views/bookingsInfo.php";
         }
     }
     public function getBookingByID($id)
     {
-        $booking = $this->model->getBookingByID($id);
+        if ($booking = $this->model->getBookingByID($id)) {
+            echo json_encode(array('status' => 'true', 'data' => $booking));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/bookingsInfo.php";
     }
     public function getBookingByHotel($hotelName)
     {
-        $booking = $this->model->getBookingByHotel($hotelName);
+        if ($booking = $this->model->getBookingByHotel($hotelName)) {
+            echo json_encode(array('status' => 'true', 'data' => $booking));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/bookingsInfo.php";
     }
     public function getBookingByCustomer($customerName)
     {
-        $booking = $this->model->getBookingByCustomer($customerName);
+        if (        $booking = $this->model->getBookingByCustomer($customerName)) {
+            echo json_encode(array('status' => 'true', 'data' => $booking));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/bookingsInfo.php";
     }
     public function getBookingByDate($date)
     {
-        $booking = $this->model->getBookingByDate($date);
+        if (        $booking = $this->model->getBookingByDate($date)) {
+            echo json_encode(array('status' => 'true', 'data' => $booking));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/bookingsInfo.php";
     }
     public function getBookingByTicket($ticket)
     {
-        $booking = $this->model->getBookingByTicket($ticket);
+        if (        $booking = $this->model->getBookingByTicket($ticket)) {
+            echo json_encode(array('status' => 'true', 'data' => $booking));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
+        include "app/views/bookingsInfo.php";
     }
     public function addBooking()
     {
@@ -58,7 +93,7 @@ class BookingController
 
             if ($this->model->addBooking($data)) {
                 echo "Booking added successfully!";
-                // header("REFRESH:0 ; URL="");
+                header("REFRESH:0 ; URL=" . BASE_PATH);
             } else {
                 echo "Failed to add user.";
             }
@@ -77,12 +112,19 @@ class BookingController
                 'ticket_id' => $ticket_id,
                 'date' => $date
             ];
-
-            if ($this->model->editBooking($data, $_GET['id'])) {
-                echo "Booking edited successfully!";
-                // header("REFRESH:0 ; URL="");
+            if (isset($_GET['id'])) {
+                if ($this->model->editBooking($data, $_GET['id'])) {
+                    echo "Booking edited successfully!";
+                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                } else {
+                    echo "Failed to edit booking.";
+                }
             } else {
-                echo "Failed to edit booking.";
+?>
+                <script>
+                    alert("No ID provided for editing the booking.");
+                </script>
+            <?php
             }
         }
     }
@@ -99,12 +141,19 @@ class BookingController
                 'ticket_id' => $ticket_id,
                 'date' => $date
             ];
-
-            if ($this->model->editBookingByCustomer($data, $_GET['customerName'])) {
-                echo "Booking edited successfully!";
-                // header("REFRESH:0 ; URL="");
+            if (isset($_GET['customerName'])) {
+                if ($this->model->editBookingByCustomer($data, $_GET['customerName'])) {
+                    echo "Booking edited successfully!";
+                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                } else {
+                    echo "Failed to edit booking.";
+                }
             } else {
-                echo "Failed to edit booking.";
+            ?>
+                <script>
+                    alert("No customer name provided for editing the booking.");
+                </script>
+            <?php
             }
         }
     }
@@ -121,12 +170,19 @@ class BookingController
                 'ticket_id' => $ticket_id,
                 'date' => $date
             ];
-
-            if ($this->model->editBookingByTicket($data, $_GET['ticket_id'])) {
-                echo "Booking edited successfully!";
-                // header("REFRESH:0 ; URL="");
+            if (isset($_GET['ticket_id'])) {
+                if ($this->model->editBookingByTicket($data, $_GET['ticket_id'])) {
+                    echo "Booking edited successfully!";
+                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                } else {
+                    echo "Failed to edit booking.";
+                }
             } else {
-                echo "Failed to edit booking.";
+            ?>
+                <script>
+                    alert("No ticket ID provided for editing the booking.");
+                </script>
+            <?php
             }
         }
     }
@@ -143,12 +199,19 @@ class BookingController
                 'ticket_id' => $ticket_id,
                 'date' => $date
             ];
-
-            if ($this->model->editBookingByHotel($data, $_GET['hotelName'])) {
-                echo "Booking edited successfully!";
-                // header("REFRESH:0 ; URL="");
+            if (isset($_GET['hotelName'])) {
+                if ($this->model->editBookingByHotel($data, $_GET['hotelName'])) {
+                    echo "Booking edited successfully!";
+                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                } else {
+                    echo "Failed to edit booking.";
+                }
             } else {
-                echo "Failed to edit booking.";
+            ?>
+                <script>
+                    alert("No hotel name provided for editing the booking.");
+                </script>
+            <?php
             }
         }
     }
@@ -165,33 +228,105 @@ class BookingController
                 'ticket_id' => $ticket_id,
                 'date' => $date
             ];
-
-            if ($this->model->editBookingByDate($data, $_GET['date'])) {
-                echo "Booking edited successfully!";
-                // header("REFRESH:0 ; URL="");
+            if (isset($_GET['date'])) {
+                if ($this->model->editBookingByDate($data, $_GET['date'])) {
+                    echo "Booking edited successfully!";
+                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                } else {
+                    echo "Failed to edit booking.";
+                }
             } else {
-                echo "Failed to edit booking.";
+            ?>
+                <script>
+                    alert("No date provided for editing the booking.");
+                </script>
+            <?php
             }
         }
     }
     public function deleteBooking()
     {
-        $this->model->deleteBookingByID($_GET['id']);
+        if ($this->model->deleteBookingByID($_GET['id'])) {
+            ?>
+            <script>
+                alert("The booking has been deleted successfully");
+            </script>
+        <?php
+        header("REFRESH:0 ; URL=" . BASE_PATH);
+        } else {
+        ?>
+            <script>
+                alert("Their is something wrong please try again!!");
+            </script>
+        <?php
+        }
     }
     public function deleteBookingDate()
     {
-        $this->model->deleteBookingByDate($_GET['date']);
+        if ($this->model->deleteBookingByDate($_GET['date'])) {
+        ?>
+            <script>
+                alert("The booking has been deleted successfully");
+            </script>
+        <?php
+        header("REFRESH:0 ; URL=" . BASE_PATH);
+        } else {
+        ?>
+            <script>
+                alert("Their is something wrong please try again!!");
+            </script>
+        <?php
+        }
     }
     public function deleteBookingCustomer()
     {
-        $this->model->deleteBookingByCustomer($_GET['customerName']);
+        if ($this->model->deleteBookingByCustomer($_GET['customerName'])) {
+        ?>
+            <script>
+                alert("The booking has been deleted successfully");
+            </script>
+        <?php
+        header("REFRESH:0 ; URL=" . BASE_PATH);
+        } else {
+        ?>
+            <script>
+                alert("Their is something wrong please try again!!");
+            </script>
+        <?php
+        }
     }
     public function deleteBookingHotel()
     {
-        $this->model->deleteBookingByHotel($_GET['hotelName']);
+        if ($this->model->deleteBookingByHotel($_GET['hotelName'])) {
+        ?>
+            <script>
+                alert("The booking has been deleted successfully");
+            </script>
+        <?php
+        header("REFRESH:0 ; URL=" . BASE_PATH);
+        } else {
+        ?>
+            <script>
+                alert("Their is something wrong please try again!!");
+            </script>
+        <?php
+        }
     }
     public function deleteBookingTicket()
     {
-        $this->model->deleteBookingByTicket($_GET['ticket_id']);
+        if ($this->model->deleteBookingByTicket($_GET['ticket_id'])) {
+        ?>
+            <script>
+                alert("The booking has been deleted successfully");
+            </script>
+        <?php
+        header("REFRESH:0 ; URL=" . BASE_PATH);
+        } else {
+        ?>
+            <script>
+                alert("Their is something wrong please try again!!");
+            </script>
+<?php
+        }
     }
 }
