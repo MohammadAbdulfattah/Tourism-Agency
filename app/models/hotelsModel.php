@@ -6,9 +6,27 @@ class HotelsModel
     {
         $this->db = $db;
     }
+    public function getHotelCity($city_id)
+    {
+        $this->db->Where('id', $city_id);
+        $cities = $this->db->get('cities');
+        foreach ($cities as $city) {
+            $cityName = $city['name'];
+            return $cityName;
+        }
+    }
+    public function geAllCities()
+    {
+        $cities = $this->db->get('cities');
+        return $cities;
+    }
     public function getAllHotels()
     {
         return $this->db->get('hotels');
+    }
+    public function getHotelName($id)
+    {
+        return $this->db->rawQuery("SELECT name FROM hotels WHERE id = $id");
     }
     public function getHotelBySpcInfo($conditions = array())
     {
