@@ -1,15 +1,48 @@
 <?php
 require __DIR__ . '/../models/ratesModel.php';
-
+require __DIR__ . '/../models/customersModel.php'; 
+require __DIR__ . '/../models/hotelsModel.php'; 
 
 class RatesController{
     private $model;
+    private $customer;
+    private $hotel;
 
     public function __construct($db){
         $this->model = new RatesModel($db);
+        $this->customer = new CustomerModel($db);
+        $this->hotel = new HotelsModel($db);
     }
     public function index(){
-        return $this->model->getAllRates();
+        $result = $this->model->getAllRates();
+        foreach ($result as $res) {
+            foreach ($res as $key => $value) {
+                if ($key == "customer_id"){
+                    $customer_name = $this->customer->getCustomerByid($value);
+                    foreach ($customer_name as $cust) {
+                        foreach ($cust as $key2 => $value2) {
+                            if($key2 == 'name'){
+                                echo $value2 ;
+                            }
+                        }
+                    }
+                }
+                if ($key == "hotel_id"){
+                    $hotel_name = $this->hotel->getHotelsByID($value);
+                    foreach ($hotel_name as $hot) {
+                        foreach ($hot as $key3 => $value3) {
+                            if($key3 == 'name'){
+                                echo $value3 ;
+                            }
+                        }
+                    }
+                }
+                if ($key == 'comment' || $key == 'star') {
+                    echo $value;
+                }
+                echo "<br>";
+            }
+        }
     }
     public function getRatesByStarNum($star) {
         $result = $this->model->getrateByStarNum($star);

@@ -8,9 +8,8 @@ class AdminsControllers{
     public function __construct($db){
         $this->model = new AdminsModel($db);
     }
-
     public function index(){
-        $users = $this->model->getAdmins();
+        //$users = $this->model->getAdmins();
         //include __DIR__ . '/../views/Admins_list.php';
     }
 
@@ -27,7 +26,6 @@ class AdminsControllers{
             echo "Failed to delete user.";
         }
     }
-
     public function updateAdmins($id){
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = $_POST['name'];
@@ -57,7 +55,6 @@ class AdminsControllers{
             return true;
         }
     }
-
     public function checkPasswordLength($password){
         $passwordCount = strlen($password);
         if ($passwordCount < 8) {
@@ -91,7 +88,6 @@ class AdminsControllers{
         }
         
     }
-
     public function login(){
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
