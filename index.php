@@ -25,6 +25,21 @@ $db = new MysqliDb(
 );
 
 
+
+$rate = new RatesController($db);
+$admin = new AdminsControllers($db);
+$rate->index();
+/*switch ($request) {
+    case BASE_PATH:
+        $admin->index();
+        break;
+    case BASE_PATH . 'login':
+        $admin->login();
+        break;
+    case BASE_PATH . 'register':
+        $admin->register();
+        break;
+}*/
 $bookingModel = new bookingModel($db);
 $bookingController = new bookingController($bookingModel);
 $hotelsModel = new HotelsModel($db);
@@ -110,4 +125,3 @@ switch ($request) {
         echo "action not found!!";
         break;
 }
-//echo json_encode(array('status' => true/false,'data' =>$data))
