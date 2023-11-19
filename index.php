@@ -15,7 +15,7 @@ spl_autoload_register(
 );
 $request = $_SERVER["REQUEST_URI"];
 define('BASE_PATH', '/mvc/');
-
+// echo $_SERVER['REQUEST_URI'];
 $config = require 'config/config.php';
 $db = new MysqliDb(
     $config['db_host'],
@@ -31,10 +31,13 @@ $hotelsController = new HotelsController($hotelsModel);
 
 switch ($request) {
     case BASE_PATH:
-        $hotelsController->allHotels();
+    $hotelsController->allHotels();
         break;
     case BASE_PATH . 'showHotel?id=' . @$_GET['id']:
         $hotelsController->getHotelByID($_GET['id']);
+        break;
+    case BASE_PATH . 'showHotelName?id=' . @$_GET['id']:
+        $hotelsController->getHotelName($_GET['id']);
         break;
     case BASE_PATH . 'showHotelSpc':
         $hotelsController->getHotelsBySpcInfo();
@@ -42,25 +45,31 @@ switch ($request) {
     case BASE_PATH . 'showHotelByPhone?phone=' . @$_GET['phone']:
         $hotelsController->getHotelsByPhone($_GET['phone']);
         break;
+    case BASE_PATH . 'showHotelByName?name=' . @$_GET['name']:
+        $hotelsController->getHotelByName($_GET['name']);
+        break;
+    case BASE_PATH . 'showHotelsByCity?cityName=' . @$_GET['cityName']:
+        $hotelsController->getHotelsByCity($_GET['cityName']);
+        break;
     case BASE_PATH . 'addHotel':
         $hotelsController->addHotel();
         break;
     case BASE_PATH . 'editHotel?id=' . @$_GET['id']:
         $hotelsController->editHotel();
         break;
-    case BASE_PATH . 'editByName?hotelName=' . @$_GET['hotelName']:
+    case BASE_PATH . 'editHotelByName?hotelName=' . @$_GET['hotelName']:
         $hotelsController->editHotelByName();
         break;
-    case BASE_PATH . 'editByCity?cityName=' . @$_GET['cityName']:
+    case BASE_PATH . 'editHotelByCity?cityName=' . @$_GET['cityName']:
         $hotelsController->editHotelByCity();
         break;
-    case BASE_PATH . 'editByPhone?phone=' . @$_GET['phone']:
+    case BASE_PATH . 'editHotelByPhone?phone=' . @$_GET['phone']:
         $hotelsController->editHotelByPhone();
         break;
-    case BASE_PATH . 'delete?id=' . @$_GET['id']:
+    case BASE_PATH . 'deleteHotel?id=' . @$_GET['id']:
         $hotelsController->deleteHotel();
         break;
-    case BASE_PATH . 'deleteByCity?cityName=' . @$_GET['cityName']:
+    case BASE_PATH . 'deleteHotelByCity?cityName=' . @$_GET['cityName']:
         $hotelsController->deleteHotelByCity();
         break;
     case BASE_PATH . 'allBookings':
