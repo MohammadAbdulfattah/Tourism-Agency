@@ -18,7 +18,6 @@
             $this->db->where('id', $id);
             return $this->db->update('admins', $data);
         }
-    
         public function deleteAdmins($id) {
             $this->db->where('id', $id);
             return $this->db->delete('admins');
