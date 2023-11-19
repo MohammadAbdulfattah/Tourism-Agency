@@ -24,7 +24,6 @@ $db = new MysqliDb(
     $config['db_name']
 );
 
-
 $bookingModel = new bookingModel($db);
 $bookingController = new bookingController($bookingModel);
 $hotelsModel = new HotelsModel($db);
