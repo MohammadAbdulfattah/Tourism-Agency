@@ -1,6 +1,6 @@
 <?php
 namespace app\models;
-
+ 
 Class customersModel{
     private $db;
     public function __construct($db)

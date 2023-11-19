@@ -1,5 +1,7 @@
 <?php
-namespace index;
+// namespace index;
+session_start();
+
 use app\controllers\customersController;
 use app\models\customersModel;
 use app\controllers\citiesController;
@@ -9,6 +11,21 @@ require_once __DIR__.'/app/models/customersModel.php';
 require_once __DIR__.'/config/config.php';
 require_once __DIR__.'/lib/DB/MysqliDb.php';
 
+// spl_autoload_register(
+//     function ($class){
+//         if(file_exists("app/models/$class.php")){
+//             require "app/models/$class.php";
+//         }
+//         if(file_exists("app/controllers/$class.php")){
+//             require_once "app/controllers/$class.php";
+//         }
+//     }
+// );
+
+$request = $_SERVER['REQUEST_URI']; 
+define('BASE_PATH', '/agency/');
+echo $_SERVER['REQUEST_URI'];
+
 $config = require 'config/config.php';
 $db = new \MysqliDb(
     $config['db_host'],
@@ -16,10 +33,6 @@ $db = new \MysqliDb(
     $config['db_pass'],
     $config['db_name']
 );
-
-$request = $_SERVER['REQUEST_URI'];
- 
-define('BASE_PATH', '/Tourism-Agency/');
 
 $customerController = new customersController($db);
 $customersModel = new customersModel($db);
