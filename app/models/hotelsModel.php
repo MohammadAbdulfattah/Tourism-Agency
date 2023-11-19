@@ -1,5 +1,4 @@
 <?php
-
 class HotelsModel
 {
     public $db;
@@ -49,6 +48,8 @@ class HotelsModel
         foreach ($cities as $city) {
             if ($cityName == $city['name']) {
                 $city_id = $city['id'];
+            } else {
+                echo "there is no city in this name ";
             }
         }
         $this->db->Where('city_id', $city_id);
@@ -79,6 +80,8 @@ class HotelsModel
         foreach ($cities as $city) {
             if ($cityName == $city['name']) {
                 $city_id = $city['id'];
+            } else {
+                echo "there is no city in this name ";
             }
         }
         $this->db->Where('city_id', $city_id);
@@ -95,6 +98,8 @@ class HotelsModel
         foreach ($cities as $city) {
             if ($cityName == $city['name']) {
                 $city_id = $city['id'];
+            } else {
+                echo "there is no city in this name ";
             }
         }
         $this->db->Where('city_id', $city_id);

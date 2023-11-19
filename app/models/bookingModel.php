@@ -37,6 +37,8 @@ class BookingModel
         foreach ($hotels as $hotel) {
             if($hotelName==$hotel['name']){
                 $hotel_id = $hotel['id'];
+            }else{
+                echo "there is no hotel in this name";
             }
         }
         $this->db->where("hotel_id",$hotel_id);
@@ -47,6 +49,8 @@ class BookingModel
         foreach ($customers as $customer) {
             if($customerName==$customer['name']){
                 $customer_id = $customer['id'];
+            }else{
+                echo "there is no customer in this name";
             }
         }
         $this->db->where("customer_id",$customer_id);
@@ -75,6 +79,8 @@ class BookingModel
         foreach ($customers as $customer) {
             if($customerName==$customer['name']){
                 $customer_id = $customer['id'];
+            }else{
+                echo "there is no customer in this name";
             }
         }
         $this->db->Where('customer_id',$customer_id);
@@ -96,6 +102,8 @@ class BookingModel
         foreach ($hotels as $hotel) {
             if($hotelName==$hotel['name']){
                 $hotel_id = $hotel['id'];
+            }else{
+                echo "there is no hotel in this name";
             }
         }
         $this->db->Where('hotel_id',$hotel_id);
@@ -117,6 +125,8 @@ class BookingModel
         foreach ($customers as $customer) {
             if($customerName==$customer['name']){
                 $customer_id = $customer['id'];
+            }else{
+                echo "there is no customer in this name!!";
             }
         }
         $this->db->Where('customer_id', $customer_id);
@@ -133,6 +143,8 @@ class BookingModel
         foreach ($hotels as $hotel) {
             if($hotelName==$hotel['name']){
                 $hotel_id = $hotel['id'];
+            }else{
+                echo "there is no hotel in this name";
             }
         }
         $this->db->Where('hotel_id', $hotel_id);
