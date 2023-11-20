@@ -1,5 +1,5 @@
 <?php
-namespace app\models;
+// namespace app\models;
 Class citiesModel{
     private $db;
     public function __construct($db){

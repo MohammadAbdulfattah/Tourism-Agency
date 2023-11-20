@@ -1,14 +1,20 @@
 <?php
-namespace app\controllers;
+// namespace app\controllers;
 require_once __DIR__.'/../models/customersModel.php';
-use app\models\customersModel;
+// use app\models\customersModel;
 Class customersController{
     private $model;
     public function __construct($db){
         $this->model = new customersModel($db);
     }
-    public function index(){
+    public function showCustomers(){
         $customers=$this->model->getCustomer();
+        if($customers){
+            echo (json_encode(array('status' => 'true' , 'data' => $customers)));
+        }
+        else{
+            echo (json_encode(array('status' => 'false' , 'message' => 'data wich entered is uncorrect')));
+        }
     }
     public function addCustomer(){
         if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -24,7 +30,7 @@ Class customersController{
                 'email' => $email,
             ];
             if($this->model->addCustomer($data)){
-                header('Location:' . BASE_PATH);
+                
                 echo "Added successfully !";
             }
             else{
@@ -36,7 +42,25 @@ Class customersController{
             }
             else{
                 return FALSE;
-            }      
+            } 
+            if(!isset($name)){
+                  echo "enter customer name!";
+                  header('Location:' . BASE_PATH);
+            }
+            if(!isset($phone)){
+                echo "enter customer phone!";
+                header('Location:' . BASE_PATH);
+            } 
+            if(!isset($gender)){
+                echo "enter customer gender!";
+                header('Location:' . BASE_PATH);
+            }   
+            if(!isset($email)){
+                echo "enter customer emai!";
+                header('Location:' . BASE_PATH);
+
+                ucfirst($name);
+            }
         }
     }
     // public function showCustomers(){
@@ -47,59 +71,63 @@ Class customersController{
     //         return FALSE;
     //     }
     // }
-    // public function deleteCustomer($id){
-    //     if($this->model->deleteCustomer($id))
-    //     {
-    //         echo "Customer deleted successfully!";
-    //         header('Location:' . BASE_PATH);
-    //     }
-    //     else {
-    //         echo "Failed to delete customer.";
-    //     }
-    // }
-    // public function getCustomerByid($id) {
-    //     if($this->model->getCustomer($id)){
-    //         header('Location:' . BASE_PATH);        }
-    //     else{
-    //         return FALSE;
-    //     }
-    // }
-    // // public function getCustomerByname($name){
-    // //     $customers = $this->model->getCustomer($name);
-    // //     if($customers){
-    // //         header('Location:' . BASE_PATH);
-    // //         var_dump($customers);
-    // //     }
-    // //     else{
-    // //         return FALSE;
-    // //     }
-    // // }
-    // public function updateCustomer($id) {
-    //     if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    //         $name = $_POST ['name'];
-    //         $phone = $_POST['phone'];
-    //         $gender = $_POST['gender'];
-    //         $email = $_POST['email'];
+    public function deleteCustomer($id){
+        if($this->model->deleteCustomer($id))
+        {
+            echo "Customer deleted successfully!";
+            header('Location:' . BASE_PATH);
+        }
+        else {
+            echo "Failed to delete customer.";
+        }
+    }
+    public function getCustomerByid($id) {
+        $data=$this->model->getCustomer($id);
+        if($data){
+            header('Location:' . BASE_PATH);
+            echo (json_encode(array('status' => 'true' , 'data' => $data)));
 
-    //         $data = [
-    //             'name' => $name,
-    //             'phone' => $phone ,
-    //             'gender' => $gender,
-    //             'email' => $email,
-    //         ];
-    //         if($this->model->updateCustomer($id,$data)){
-    //             echo "Customer updated successfully !";
-              
-    //            header('Location:' . BASE_PATH);
-    //         }
-    //         else{
-    //             echo "Filed update !";
-    //         }
-    //     }
-    //     else{
-    //         $this->getCustomerByid($id);
-    //     }
-    // }
+        }
+        else{
+            echo (json_encode((array('status' => 'true' , 'data' => "Filed get customer !"))));
+        }
+    }
+    public function getCustomerByname($name){
+        $customers = $this->model->getCustomer($name);
+        if($customers){
+            header('Location:' . BASE_PATH);
+            echo (json_encode(array('status' => 'true' , 'data' => $customers)));
+        }
+        else{
+            echo (json_encode(array('status' => 'false' , 'message' => 'data wich entered is uncorrect')));
+        }
+    }
+    
+    public function updateCustomer($id) {
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $name = $_POST ['name'];
+            $phone = $_POST['phone'];
+            $gender = $_POST['gender'];
+            $email = $_POST['email'];
+
+            $data = [
+                'name' => $name,
+                'phone' => $phone ,
+                'gender' => $gender,
+                'email' => $email,
+            ];
+            if($this->model->updateCustomer($id,$data)){
+                echo "Customer updated successfully !";
+               header('Location:' . BASE_PATH);
+            }
+            else{
+                echo "Filed update !";
+            }
+        }
+        else{
+            $this->getCustomerByid($id);
+        }
+    }
     // public function searchCustomer($searchTerm){
     //     $customer=$this->model->searchCustomer($searchTerm);
     //     if($customer){
@@ -109,13 +137,4 @@ Class customersController{
     //         return FALSE;
     //     }
     // }
-    // // public function editCustomer($id){
-    // //     $customers=$this->model->getCustomerByid($id);
-    // //     if($customers){
-    // //         return True;
-    // //     }
-    // //     else{
-    // //         return FALSE;
-    // //     }
-    // // }
 }

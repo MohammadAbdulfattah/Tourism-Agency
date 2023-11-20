@@ -1,5 +1,5 @@
 <?php
-namespace app\models;
+// namespace app\models;
  
 Class customersModel{
     private $db;
@@ -13,7 +13,7 @@ Class customersModel{
     }
     public function getCustomer()
     {
-        return $this->db->get('custoners');
+        return $this->db->get('customers');
     }
     public function getCustomerByid($id)
     {
