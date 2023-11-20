@@ -7,14 +7,33 @@ class BookingController
     {
         $this->model = $model;
     }
+    public function getBookingCustomer($customer_id){
+        $customerName = $this->model->getBookingCustomer($customer_id);
+        return $customerName;
+    }
+    public function getBookingHotel($hotel_id){
+        $hotelName = $this->model->getBookingHotel($hotel_id);
+        return $hotelName;
+    }
+    public function getBookingTicket($ticket_id){
+        $ticketDate = $this->model->getBookingTicket($ticket_id);
+        return $ticketDate;
+    }
     public function allBookings()
     {
         if ($bookings = $this->model->getAllBooking()) {
-            echo json_encode(array('status' => 'true', 'data' => $bookings));
+            $data = array();
+            foreach ($bookings as $booking) {
+                $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                $customerName = $this->getBookingCustomer($booking['customer_id']);
+                $date = $booking['date'];
+                array_push($data, $customerName, $ticketDate, $hotelName,$date);
+            }
+            echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/bookingsView.php";
     }
     public function getBookingBySpcInfo()
     {
@@ -24,8 +43,16 @@ class BookingController
                 $condition = "$key = '$value'";
                 array_push($conditions, $condition);
             }
-            if (            $bookings = $this->model->getBookingBySpcInfo($conditions)) {
-                echo json_encode(array('status' => 'true', 'data' => $bookings));
+            if ($bookings = $this->model->getBookingBySpcInfo($conditions)) {
+                $data = array();
+                foreach ($bookings as $booking) {
+                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                    $customerName = $this->getBookingCustomer($booking['customer_id']);
+                    $date = $booking['date'];
+                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
+                }
+                echo json_encode(array('status' => 'true', 'data' => $data));
             } else {
                 echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
             }
@@ -34,8 +61,16 @@ class BookingController
     }
     public function getBookingByID($id)
     {
-        if ($booking = $this->model->getBookingByID($id)) {
-            echo json_encode(array('status' => 'true', 'data' => $booking));
+        if ($bookings = $this->model->getBookingByID($id)) {
+            $data = array();
+                foreach ($bookings as $booking) {
+                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                    $customerName = $this->getBookingCustomer($booking['customer_id']);
+                    $date = $booking['date'];
+                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
+                }
+            echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
@@ -43,8 +78,16 @@ class BookingController
     }
     public function getBookingByHotel($hotelName)
     {
-        if ($booking = $this->model->getBookingByHotel($hotelName)) {
-            echo json_encode(array('status' => 'true', 'data' => $booking));
+        if ($bookings = $this->model->getBookingByHotel($hotelName)) {
+            $data = array();
+                foreach ($bookings as $booking) {
+                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                    $customerName = $this->getBookingCustomer($booking['customer_id']);
+                    $date = $booking['date'];
+                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
+                }
+            echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
@@ -52,8 +95,16 @@ class BookingController
     }
     public function getBookingByCustomer($customerName)
     {
-        if (        $booking = $this->model->getBookingByCustomer($customerName)) {
-            echo json_encode(array('status' => 'true', 'data' => $booking));
+        if ($bookings = $this->model->getBookingByCustomer($customerName)) {
+            $data = array();
+                foreach ($bookings as $booking) {
+                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                    $customerName = $this->getBookingCustomer($booking['customer_id']);
+                    $date = $booking['date'];
+                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
+                }
+            echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
@@ -61,8 +112,16 @@ class BookingController
     }
     public function getBookingByDate($date)
     {
-        if (        $booking = $this->model->getBookingByDate($date)) {
-            echo json_encode(array('status' => 'true', 'data' => $booking));
+        if ($bookings = $this->model->getBookingByDate($date)) {
+            $data = array();
+                foreach ($bookings as $booking) {
+                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                    $customerName = $this->getBookingCustomer($booking['customer_id']);
+                    $date = $booking['date'];
+                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
+                }
+            echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
@@ -70,8 +129,16 @@ class BookingController
     }
     public function getBookingByTicket($ticket)
     {
-        if (        $booking = $this->model->getBookingByTicket($ticket)) {
-            echo json_encode(array('status' => 'true', 'data' => $booking));
+        if ($bookings = $this->model->getBookingByTicket($ticket)) {
+            $data = array();
+                foreach ($bookings as $booking) {
+                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                    $customerName = $this->getBookingCustomer($booking['customer_id']);
+                    $date = $booking['date'];
+                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
+                }
+            echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
@@ -80,23 +147,44 @@ class BookingController
     public function addBooking()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $customer_id = $_POST['customer_id'];
-            $hotel_id = $_POST['hotel_id'];
-            $ticket_id = $_POST['ticket_id'];
-            $date = $_POST['date'];
-            $data = [
-                'customer_id' => $customer_id,
-                'hotel_id' => $hotel_id,
-                'ticket_id' => $ticket_id,
-                'date' => $date
-            ];
-
-            if ($this->model->addBooking($data)) {
-                echo "Booking added successfully!";
-                header("REFRESH:0 ; URL=" . BASE_PATH);
-            } else {
-                echo "Failed to add user.";
+            $customersID = array();
+            $hotelsID = array();
+            $customers = $this->model->getAllCustomers();
+            $hotels = $this->model->getAllHotels();
+            foreach ($customers as $customer) {
+                array_push($customersID, $customer['id']);
             }
+            foreach ($hotels as $hotel) {
+                array_push($hotelsID, $hotel['id']);
+            }
+            if(in_array($_POST['customer_id'],$customersID)){
+                if(in_array($_POST['hotel_id'],$hotelsID)){
+
+                    $customer_id = $_POST['customer_id'];
+                    $hotel_id = $_POST['hotel_id'];
+                    $ticket_id = $_POST['ticket_id'];
+                    $date = $_POST['date'];
+                    $data = [
+                        'customer_id' => $customer_id,
+                        'hotel_id' => $hotel_id,
+                        'ticket_id' => $ticket_id,
+                        'date' => $date
+                    ];
+        
+                    if ($this->model->addBooking($data)) {
+                        echo "Booking added successfully!";
+                        header("REFRESH:0 ; URL=" . BASE_PATH);
+                    } else {
+                        echo "Failed to add user.";
+                    }
+                }else{
+                    echo "Please select a valid hotel";
+                }
+            }else{
+                echo "Please select a valid customer";
+            }
+        }else{
+            echo "Invalid request method";
         }
     }
     public function editBooking()
@@ -126,6 +214,8 @@ class BookingController
                 </script>
             <?php
             }
+        }else{
+            echo "Invalid request method";
         }
     }
     public function editBookingByCustomer()
@@ -155,6 +245,8 @@ class BookingController
                 </script>
             <?php
             }
+        }else{
+            echo "Invalid request method";
         }
     }
     public function editBookingByTicket()
@@ -184,6 +276,8 @@ class BookingController
                 </script>
             <?php
             }
+        }else{
+            echo "Invalid request method";
         }
     }
     public function editBookingByHotel()
@@ -213,6 +307,8 @@ class BookingController
                 </script>
             <?php
             }
+        }else{
+            echo "Invalid request method";
         }
     }
     public function editBookingByDate()
@@ -242,6 +338,8 @@ class BookingController
                 </script>
             <?php
             }
+        }else{
+            echo "Invalid request method";
         }
     }
     public function deleteBooking()
@@ -252,7 +350,7 @@ class BookingController
                 alert("The booking has been deleted successfully");
             </script>
         <?php
-        header("REFRESH:0 ; URL=" . BASE_PATH);
+            header("REFRESH:0 ; URL=" . BASE_PATH);
         } else {
         ?>
             <script>
@@ -269,7 +367,7 @@ class BookingController
                 alert("The booking has been deleted successfully");
             </script>
         <?php
-        header("REFRESH:0 ; URL=" . BASE_PATH);
+            header("REFRESH:0 ; URL=" . BASE_PATH);
         } else {
         ?>
             <script>
@@ -286,7 +384,7 @@ class BookingController
                 alert("The booking has been deleted successfully");
             </script>
         <?php
-        header("REFRESH:0 ; URL=" . BASE_PATH);
+            header("REFRESH:0 ; URL=" . BASE_PATH);
         } else {
         ?>
             <script>
@@ -303,7 +401,7 @@ class BookingController
                 alert("The booking has been deleted successfully");
             </script>
         <?php
-        header("REFRESH:0 ; URL=" . BASE_PATH);
+            header("REFRESH:0 ; URL=" . BASE_PATH);
         } else {
         ?>
             <script>
@@ -320,7 +418,7 @@ class BookingController
                 alert("The booking has been deleted successfully");
             </script>
         <?php
-        header("REFRESH:0 ; URL=" . BASE_PATH);
+            header("REFRESH:0 ; URL=" . BASE_PATH);
         } else {
         ?>
             <script>
