@@ -28,10 +28,11 @@ $bookingModel = new bookingModel($db);
 $bookingController = new bookingController($bookingModel);
 $hotelsModel = new HotelsModel($db);
 $hotelsController = new HotelsController($hotelsModel);
-
+$rateController = new RatesController($db);
+$adminController = new AdminsController($db);
 switch ($request) {
     case BASE_PATH:
-    $hotelsController->allHotels();
+        $hotelsController->allHotels();
         break;
     case BASE_PATH . 'showHotel?id=' . @$_GET['id']:
         $hotelsController->getHotelByID($_GET['id']);
@@ -113,6 +114,45 @@ switch ($request) {
         break;
     case BASE_PATH . 'deleteBooking?=id'.@$_GET['id']:
         $bookingController->deleteBooking();
+        break;
+    case BASE_PATH . 'viewrate':
+        $rateController->getAllRates();
+        break;
+    case BASE_PATH . 'ratebystarnumber?star=' . @$_GET['star']:
+        $rateController->getRatesByStarNum($_GET['star']);
+        break;
+    case BASE_PATH . 'ratebyhotel?hotel_id=' . @$_GET['hotel_id']:
+        $rateController->getRatesByStarNum($_GET['star']);
+        break;
+    case BASE_PATH . 'ratebycustomer?customer_id=' . @$_GET['customer_id']:
+        $rateController->getRatesByCustomerId($_GET['customer_id']);
+        break;
+    case BASE_PATH . 'addrate':
+        $rateController->addRates();
+        break;
+    case BASE_PATH . 'editrate?id=' . @$_GET['id']:
+        $rateController->editRates();
+        break;
+    case BASE_PATH . 'editratebyhotel?hotel_id=' . @$_GET['hotel_id']:
+        $rateController->editRatesByHotelID();
+        break;
+    case BASE_PATH . 'editratebycustomer?customer_id=' . @$_GET['customer_id']:
+        $rateController->editRatesByCustomerID();
+        break;
+    case BASE_PATH . 'deleterate?customer_id=' . @$_GET['customer_id'].'&hotel_id='. @$_GET['hotel_id']:
+        $rateController->deleteRates();
+        break;
+    case BASE_PATH . 'register':
+        $adminController->register();
+        break;
+    case BASE_PATH . 'login':
+        $adminController->login();
+        break;
+    case BASE_PATH . 'deleteadmin?id=' . @$_GET['id']:
+        $adminController->deleteAdmins($_GET['id']);
+        break;
+    case BASE_PATH . 'editadmin?id=' . @$_GET['id']:
+        $adminController->updateAdmins($_GET['id']);
         break;
     default:
         echo "action not found!!";

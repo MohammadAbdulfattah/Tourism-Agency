@@ -1,100 +1,154 @@
 <?php
 require __DIR__ . '/../models/ratesModel.php';
-require __DIR__ . '/../models/customersModel.php'; 
-require __DIR__ . '/../models/hotelsModel.php'; 
+require __DIR__ . '/../models/customersModel.php';
+require __DIR__ . '/../models/hotelsModel.php';
 
-class RatesController{
+class RatesController
+{
     private $model;
     private $customer;
     private $hotel;
 
-    public function __construct($db){
+    public function __construct($db)
+    {
         $this->model = new RatesModel($db);
         $this->customer = new CustomerModel($db);
         $this->hotel = new HotelsModel($db);
     }
-    public function index(){
+    public function getAllRates()
+    {
         $result = $this->model->getAllRates();
-        foreach ($result as $res) {
-            foreach ($res as $key => $value) {
-                if ($key == "customer_id"){
-                    $customer_name = $this->customer->getCustomerByid($value);
-                    foreach ($customer_name as $cust) {
-                        foreach ($cust as $key2 => $value2) {
-                            if($key2 == 'name'){
-                                echo $value2 ;
+        if ($result) {
+            $information = array();
+            foreach ($result as $res) {
+                foreach ($res as $key => $value) {
+                    if ($key == "customer_id") {
+                        $customer_name = $this->customer->getCustomerByid($value);
+                        foreach ($customer_name as $cust) {
+                            foreach ($cust as $key2 => $value2) {
+                                if ($key2 == 'name') {
+                                    array_push($information, $key2, $value2);
+                                }
                             }
                         }
                     }
-                }
-                if ($key == "hotel_id"){
-                    $hotel_name = $this->hotel->getHotelsByID($value);
-                    foreach ($hotel_name as $hot) {
-                        foreach ($hot as $key3 => $value3) {
-                            if($key3 == 'name'){
-                                echo $value3 ;
+                    if ($key == "hotel_id") {
+                        $hotel_name = $this->hotel->getHotelsByID($value);
+                        foreach ($hotel_name as $hot) {
+                            foreach ($hot as $key3 => $value3) {
+                                if ($key3 == 'name') {
+                                    array_push($information, $key3, $value3);
+                                }
                             }
                         }
                     }
+                    if ($key == 'comment' || $key == 'star') {
+                        array_push($information, $key, $value);
+                    }
                 }
-                if ($key == 'comment' || $key == 'star') {
-                    echo $value;
-                }
-                echo "<br>";
             }
+            echo json_encode(array('status' => 'true', 'data' => $information));
+        } else {
+            echo json_encode(array('status' => 'false', 'messege' => 'some thing wrong'));
         }
     }
-    public function getRatesByStarNum($star) {
+    public function getRatesByStarNum($star)
+    {
         $result = $this->model->getrateByStarNum($star);
-        foreach ($result as $res) {
-            foreach ($res as $key => $value) {
-                if ($key == 'hotel_id' || $key == 'comment') {
-                    echo $value;
+        $information = array();
+        if ($result) {
+            foreach ($result as $res) {
+                foreach ($res as $key => $value) {
+                    if ($key == "hotel_id") {
+                        $hotel_name = $this->hotel->getHotelsByID($value);
+                        foreach ($hotel_name as $hot) {
+                            foreach ($hot as $key3 => $value3) {
+                                if ($key3 == 'name') {
+                                    array_push($information, $key3, $value3);
+                                }
+                            }
+                        }
+                    }
+                    if ($key == 'comment') {
+                        array_push($information, $key, $value);
+                    }
                 }
             }
+            echo json_encode(array('status' => 'true', 'data' => $information));
+        } else {
+            echo json_encode(array('status' => 'false', 'messege' => 'There Is No Hotel With This Rating'));
         }
     }
-    public function getRatesByHotelId($hotel_id) {
+    public function getRatesByHotelId($hotel_id)
+    {
         $result = $this->model->getRateByHotelId($hotel_id);
-        foreach ($result as $res) {
-            foreach ($res as $key => $value) {
-                if ($key == 'star' || $key == 'comment') {
-                    echo $value;
+        $information = array();
+        if ($result) {
+            foreach ($result as $res) {
+                foreach ($res as $key => $value) {
+                    if ($key == 'star' || $key == 'comment') {
+                        array_push($information, $key, $value);
+                    }
                 }
             }
+            echo json_encode(array('status' => 'true', 'data' => $information));
+        } else {
+            echo json_encode(array('status' => 'false', 'messege' => 'some thing wrong'));
         }
     }
-    public function getRatesByCustomerId($customer_id) {
+    public function getRatesByCustomerId($customer_id)
+    {
         $result = $this->model->getRateByCustomerId($customer_id);
-        foreach ($result as $res) {
-            foreach ($res as $key => $value) {
-                if ($key == 'star' || $key == 'comment') {
-                    echo $value;
+        $information = array();
+        if ($result) {
+            foreach ($result as $res) {
+                foreach ($res as $key => $value) {
+                    if ($key == 'star' || $key == 'comment') {
+                        echo $value;
+                    }
                 }
             }
+            echo json_encode(array('status' => 'true', 'data' => $information));
+        } else {
+            echo json_encode(array('status' => 'false', 'messege' => 'some thing wrong'));
         }
     }
-    public function addRates() {
+    public function addRates()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $customer_id = $_POST['customer_id'];
             $hotel_id = $_POST['hotel_id'];
             $comment = $_POST['comment'];
             $star = $_POST['star'];
+            $x=0;
+            $result = $this->model->getAllRates();
+            foreach ($result as $res) {
+                foreach ($res as $key => $value) {
+                    if ($key == 'customer_id' && $value == $customer_id) {
+                        foreach ($res as $key2 => $value2) {
+                            if($key2 == 'hotel_id' && $value2 == $hotel_id){
+                                echo json_encode(array('status' => 'false', 'messege' => 'The Customer is already rate this hotel.'));
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
             $data = [
                 'customer_id' => $customer_id,
                 'hotel_id' => $hotel_id,
-                'comment'=> $comment,
+                'comment' => $comment,
                 'star' => $star
             ];
             if ($this->model->addRate($data)) {
-                echo "Rate added successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
+                echo json_encode(array('status' => 'true', 'messege' => 'Rate added successfully!'));
             } else {
-                echo "Failed to add Rate.";
+                echo json_encode(array('status' => 'false', 'messege' => 'Failed to add Rate.'));
             }
         }
     }
-    public function editRates() {
+    public function editRates()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $comment = $_POST['comment'];
             $star = $_POST['star'];
@@ -103,14 +157,14 @@ class RatesController{
                 'star' => $star
             ];
             if ($this->model->editRateByID($data, $_GET['id'])) {
-                echo "Rate info edited successfully!";
-
+                echo json_encode(array('status' => 'true', 'messege' => 'Rate info edited successfully!'));
             } else {
-                echo "Failed to edit Rate.";
+                echo json_encode(array('status' => 'false', 'messege' => 'Failed to edit Rate.'));
             }
         }
     }
-    public function editRatesByHotelID(){
+    public function editRatesByHotelID()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $comment = $_POST['comment'];
             $star = $_POST['star'];
@@ -119,15 +173,14 @@ class RatesController{
                 'star' => $star
             ];
             if ($this->model->editRateByHotelID($data, $_GET['hotel_id'])) {
-                echo "Rate info edited successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-
+                echo json_encode(array('status' => 'true', 'messege' => 'Rate info edited successfully!'));
             } else {
-                echo "Failed to edit Rate.";
+                echo json_encode(array('status' => 'false', 'messege' => 'Failed to edit Rate.'));
             }
         }
     }
-    public function editRatesByCustomerID(){
+    public function editRatesByCustomerID()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $star = $_POST['star'];
             $comment = $_POST['comment'];
@@ -136,16 +189,18 @@ class RatesController{
                 'star' => $star
             ];
             if ($this->model->editRateByCustomerID($data, $_GET['customer_id'])) {
-                echo "Rate info edited successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-
+                echo json_encode(array('status' => 'true', 'messege' => 'Rate info edited successfully!'));
             } else {
-                echo "Failed to edit Rate.";
+                echo json_encode(array('status' => 'false', 'messege' => 'Failed to edit Rate.'));
             }
         }
     }
-    public function deleteRates(){
-        $this->model->deleteRate($_GET['customer_id'],$_GET['hotel_id']);
+    public function deleteRates()
+    {
+        if (!$this->model->deleteRate($_GET['customer_id'], $_GET['hotel_id'])) {
+            echo json_encode(array('status' => 'true', 'messege' => 'Delete Done successfully!'));
+        } else {
+            echo json_encode(array('status' => 'false', 'messege' => 'Failed to Delete Rate.'));
+        }
     }
 }
-?>
