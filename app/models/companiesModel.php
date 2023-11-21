@@ -16,9 +16,8 @@ class CompaniesModel
         if (!empty($conditions)) {
             for ($i = 0; $i < count($conditions); $i++) {
                 $sql .= $conditions[$i];
-                for ($j = 0; $j <= $i; $j++) {
+                for ($j = 0; $j < 1; $j++) {
                     $sql .= ' AND ';
-                    break;
                 }
             }
         }
