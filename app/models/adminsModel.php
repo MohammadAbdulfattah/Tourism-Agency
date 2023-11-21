@@ -21,11 +21,20 @@
     
         public function deleteAdmins($id) {
             $this->db->where('id', $id);
-            return $this->db->delete('admins');
+            $resutlt = $this->db->get('admins');
+            if($resutlt){
+                $this->db->where('id', $id);
+                return $this->db->delete('admins');
+            }
+            return false;
         }
         //check for email and password
-        public function searchAdmins($email,$password) {
+        public function searchEmailAdmins($email) {
             $this->db->where ('email', $email);
+            $results = $this->db->get ('admins');
+            return $results;
+        }
+        public function searchPassAdmins($password) {
             $this->db->where ('password', $password);
             $results = $this->db->get ('admins');
             return $results;
