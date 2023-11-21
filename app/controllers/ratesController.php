@@ -9,8 +9,8 @@ class RatesController
     public function __construct($db)
     {
         $this->model = new RatesModel($db);
-        //$this->customer = new CustomerModel($db);
-        //$this->hotel = new HotelsModel($db);
+        $this->customer = new customersModel($db);
+        $this->hotel = new HotelsModel($db);
     }
     public function getAllRates()
     {
@@ -21,17 +21,16 @@ class RatesController
                 foreach ($res as $key => $value) {
                     if ($key == "customer_id") {
                         $customer_name = $this->customer->getCustomerByid($value);
-                        foreach ($customer_name as $cust) {
-                            foreach ($cust as $key2 => $value2) {
+                        foreach ($customer_name as $key2 => $value2) {
                                 if ($key2 == 'name') {
                                     array_push($information, $key2, $value2);
                                 }
                             }
-                        }
                     }
                     if ($key == "hotel_id") {
                         $hotel_name = $this->hotel->getHotelsByID($value);
                         foreach ($hotel_name as $hot) {
+                            
                             foreach ($hot as $key3 => $value3) {
                                 if ($key3 == 'name') {
                                     array_push($information, $key3, $value3);
@@ -43,8 +42,8 @@ class RatesController
                         array_push($information, $key, $value);
                     }
                 }
-            }
             echo json_encode(array('status' => 'true', 'data' => $information));
+            }
         } else {
             echo json_encode(array('status' => 'false', 'messege' => 'some thing wrong'));
         }
@@ -101,7 +100,7 @@ class RatesController
             foreach ($result as $res) {
                 foreach ($res as $key => $value) {
                     if ($key == 'star' || $key == 'comment') {
-                        echo $value;
+                        array_push($information, $key, $value);
                     }
                 }
             }
@@ -117,7 +116,10 @@ class RatesController
             $hotel_id = $_POST['hotel_id'];
             $comment = $_POST['comment'];
             $star = $_POST['star'];
-            $x=0;
+            if(($star + 0) > 5){
+                echo json_encode(array('status' => 'false', 'messege' => 'Rate Star Must be Less than 5'));
+                return;
+            }
             $result = $this->model->getAllRates();
             foreach ($result as $res) {
                 foreach ($res as $key => $value) {
@@ -149,6 +151,10 @@ class RatesController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $comment = $_POST['comment'];
             $star = $_POST['star'];
+            if(($star + 0) > 5){
+                echo json_encode(array('status' => 'false', 'messege' => 'Rate Star Must be Less than 5'));
+                return;
+            }
             $data = [
                 'comment' => $comment,
                 'star' => $star
@@ -165,6 +171,10 @@ class RatesController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $comment = $_POST['comment'];
             $star = $_POST['star'];
+            if(($star + 0) > 5){
+                echo json_encode(array('status' => 'false', 'messege' => 'Rate Star Must be Less than 5'));
+                return;
+            }
             $data = [
                 'comment' => $comment,
                 'star' => $star
@@ -179,8 +189,12 @@ class RatesController
     public function editRatesByCustomerID()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $star = $_POST['star'];
             $comment = $_POST['comment'];
+            $star = $_POST['star'];
+            if(($star + 0) > 5){
+                echo json_encode(array('status' => 'false', 'messege' => 'Rate Star Must be Less than 5'));
+                return;
+            }
             $data = [
                 'comment' => $comment,
                 'star' => $star
@@ -194,7 +208,7 @@ class RatesController
     }
     public function deleteRates()
     {
-        if (!$this->model->deleteRate($_GET['customer_id'], $_GET['hotel_id'])) {
+        if ($this->model->deleteRate($_GET['customer_id'], $_GET['hotel_id'])) {
             echo json_encode(array('status' => 'true', 'messege' => 'Delete Done successfully!'));
         } else {
             echo json_encode(array('status' => 'false', 'messege' => 'Failed to Delete Rate.'));
