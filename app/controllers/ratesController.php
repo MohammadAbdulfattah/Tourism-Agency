@@ -1,7 +1,4 @@
 <?php
-require __DIR__ . '/../models/ratesModel.php';
-require __DIR__ . '/../models/customersModel.php';
-require __DIR__ . '/../models/hotelsModel.php';
 
 class RatesController
 {
@@ -12,8 +9,8 @@ class RatesController
     public function __construct($db)
     {
         $this->model = new RatesModel($db);
-        $this->customer = new CustomerModel($db);
-        $this->hotel = new HotelsModel($db);
+        //$this->customer = new CustomerModel($db);
+        //$this->hotel = new HotelsModel($db);
     }
     public function getAllRates()
     {

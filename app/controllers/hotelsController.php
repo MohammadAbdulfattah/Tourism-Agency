@@ -26,7 +26,6 @@ class HotelsController
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/hotelsView.php";
     }
     public function getHotelName($id)
     {
@@ -36,7 +35,6 @@ class HotelsController
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/hotelsView.php";
     }
     public function getHotelsBySpcInfo()
     {
@@ -58,7 +56,6 @@ class HotelsController
             } else {
                 echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
             }
-            include "app/views/hotelInfo.php";
         }
     }
     public function getHotelByID($id)
@@ -75,7 +72,6 @@ class HotelsController
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/hotelInfo.php";
     }
     public function getHotelsByPhone($phone)
     {
@@ -91,7 +87,6 @@ class HotelsController
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/hotelsView.php";
     }
     public function getHotelsByCity($cityName)
     {
@@ -107,7 +102,6 @@ class HotelsController
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/hotelsView.php";
     }
     public function getHotelByName($name)
     {
@@ -123,7 +117,6 @@ class HotelsController
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/hotelsView.php";
     }
     public function addHotel()
     {
@@ -153,7 +146,7 @@ class HotelsController
             } else {
                 echo "there is no city in this name";
             }
-        }else{
+        } else {
             echo "Invalid request method";
         }
     }
@@ -189,10 +182,10 @@ class HotelsController
                     </script>
                 <?php
                 }
-            }else{
+            } else {
                 echo "there is no city in this name";
             }
-        }else{
+        } else {
             echo "Invalid request method";
         }
     }
@@ -222,16 +215,16 @@ class HotelsController
                         echo "Failed to edit hotel.";
                     }
                 } else {
-                    ?>
-                <script>
-                    alert("no hotel name provided to edit hotel !!")
-                </script>
-            <?php
+                ?>
+                    <script>
+                        alert("no hotel name provided to edit hotel !!")
+                    </script>
+                <?php
                 }
-            }else{
+            } else {
                 echo "there is no city in this name";
             }
-        }else{
+        } else {
             echo "Invalid request method";
         }
     }
@@ -261,16 +254,16 @@ class HotelsController
                         echo "Failed to edit hotel.";
                     }
                 } else {
-                    ?>
-                <script>
-                    alert("no phone number provided to edit hotel !!")
-                </script>
-            <?php
+                ?>
+                    <script>
+                        alert("no phone number provided to edit hotel !!")
+                    </script>
+                <?php
                 }
-            }else{
+            } else {
                 echo "there is no city in this name";
             }
-        }else{
+        } else {
             echo "Invalid request method";
         }
     }
@@ -300,16 +293,16 @@ class HotelsController
                         echo "Failed to edit hotel.";
                     }
                 } else {
-                    ?>
-                <script>
-                    alert("no City name provided to edit hotel !!")
-                </script>
+                ?>
+                    <script>
+                        alert("no City name provided to edit hotel !!")
+                    </script>
             <?php
                 }
-            }else{
+            } else {
                 echo "there is no city in this name";
             }
-        }else{
+        } else {
             echo "Invalid request method";
         }
     }

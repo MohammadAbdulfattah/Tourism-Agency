@@ -1,5 +1,4 @@
 <?php
-require __DIR__ . '/../models/adminsModel.php';
 
 class AdminsController
 {
@@ -10,25 +9,16 @@ class AdminsController
     {
         $this->model = new AdminsModel($db);
     }
-  
-    public function index(){
-        //$users = $this->model->getAdmins();
-        //include __DIR__ . '/../views/Admins_list.php';
-    }
 
-    public function showAdmins(){
-        $users = $this->model->getAdmins();
-        //include '../views/admin_list.php';
-    }
-
-    public function deleteAdmins($id){
+    public function deleteAdmins($id)
+    {
         if ($this->model->deleteAdmins($id)) {
             echo json_encode(array('status' => 'true', 'messege' => 'Admin deleted successfully!'));
         } else {
             echo json_encode(array('status' => 'false', 'messege' => 'Failed to delete Admin.'));
         }
     }
-  
+
     public function updateAdmins($id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -101,6 +91,7 @@ class AdminsController
             echo json_encode(array('status' => 'false', 'messege' => 'Incorect Email'));
         }
     }
+
     public function login()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
