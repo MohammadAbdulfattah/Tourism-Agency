@@ -82,6 +82,16 @@ class AdminsController
         }
     }
 
+    public function generateRandomString($length = 25) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
     public function register()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -122,15 +132,45 @@ class AdminsController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
             $password = $_POST['password'];
+            $token = $this->generateRandomString();
             if ($this->model->searchEmailAdmins($email)) {
                 if ($this->model->searchPassAdmins($password)) {
-                    echo json_encode(array('status' => 'true', 'messege' => 'You Can Access'));
+                    $id = $this->model->getIdByEmail($email);
+                    $data = ['token' => $token];
+                    $this->model->updateAdmins($id,$data);
+                    $token = $this->model->getTokenById($id);
+                    echo json_encode(array('status' => 'true', 'data' => ['token' => $token,'messege' => 'You Can Access']));
                 } else {
                     echo json_encode(array('status' => 'false', 'messege' => 'Incroect Password'));
                 }
             } else {
-                echo json_encode(array('status' => 'false', 'messege' => 'The email you entered isn’t connected to an account'));
+                echo json_encode(array('status' => 'false', 'messege' => 'The email you entered is not connected to an account'));
             }
         }
+    }
+    public function logout(){
+        foreach (getallheaders() as $key => $value) {
+            if($key == 'token') {
+                $id = $this->model->getIdByToken($value);
+                $data = ['token' => NULL];
+                if ($this->model->updateAdmins($id, $data)) {
+                    echo json_encode(array('status' => 'true', 'messege' => 'Admin Logout successfully!'));
+                } else {
+                    echo json_encode(array('status' => 'false', 'messege' => 'Failed to logout'));
+                }
+            }
+        }
+    }
+
+    public function check(){
+        foreach (getallheaders() as $key => $value) {
+            if($key == 'token') {
+                if($this->model->getToken($value)){
+                    return true;
+                }
+            }
+        }
+        echo json_encode(array('status' => 'false', 'messege' => 'please login first'));
+        return false;
     }
 }
