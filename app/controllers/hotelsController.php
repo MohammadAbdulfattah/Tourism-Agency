@@ -10,9 +10,9 @@ class HotelsController
     public function getHotelCity($city_id)
     {
         $cityName = $this->model->getHotelCity($city_id);
-        if(!empty($cityName)){
+        if (!empty($cityName)) {
             return $cityName;
-        }else{
+        } else {
             echo "No city found";
         }
     }
@@ -59,8 +59,8 @@ class HotelsController
             } else {
                 echo json_encode(array('status' => 'false', 'message' => 'no data'));
             }
-        }else{
-            echo json_encode(array('status'=>'false','message'=>' wrong request method '));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => ' wrong request method '));
         }
     }
     public function getHotelByID($id)
@@ -132,27 +132,28 @@ class HotelsController
                 array_push($citiesID, $city['id']);
             }
             if (in_array($_POST['city_id'], $citiesID)) {
-                $name = $_POST['name'];
-                $phone = $_POST['phone'];
-                $city_id = $_POST['city_id'];
-
-                $data = [
-                    'name' => $name,
-                    'phone' => $phone,
-                    'city_id' => $city_id
-                ];
-
-                if ($this->model->addHotel($data)) {
-                    echo "Hotel added successfully!";
-                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                $name = @$_POST['name'];
+                $phone = @$_POST['phone'];
+                $city_id = @$_POST['city_id'];
+                if (!empty($name) && !empty($phone) && !empty($city_id)) {
+                    $data = [
+                        'name' => $name,
+                        'phone' => $phone,
+                        'city_id' => $city_id
+                    ];
+                    if ($this->model->addHotel($data)) {
+                        echo json_encode(array('status' => 'true', 'message' => 'Hotel added successfully!'));
+                    } else {
+                        echo json_encode(array('status' => 'false', 'message' => 'Failed to add hotel.'));
+                    }
                 } else {
-                    echo "Failed to add hotel.";
+                    echo json_encode(array('status' => 'false', 'message' => 'please enter all the data'));
                 }
             } else {
-                echo "there is no city in this name";
+                echo json_encode(array('status' => 'false', 'message' => 'there is no city in this name'));
             }
         } else {
-            echo "Invalid request method";
+            echo json_encode(array('status' => 'false', 'message' => 'Invalid request method'));
         }
     }
     public function editHotel()
@@ -164,23 +165,27 @@ class HotelsController
             foreach ($cities as $city) {
                 array_push($citiesID, $city['id']);
             }
-            if (in_array($_POST['city_id'], $citiesID)) {
-                $name = $_POST['name'];
-                $phone = $_POST['phone'];
-                $city_id = $_POST['city_id'];
-                $data = [
-                    'name' => $name,
-                    'phone' => $phone,
-                    'city_id' => $city_id
-                ];
-                if (isset($_GET['id'])) {
-                    if ($this->model->editHotelByID($data, $_GET['id'])) {
-                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully'));
+            if (in_array(@$_POST['city_id'], $citiesID)) {
+                $name = @$_POST['name'];
+                $phone = @$_POST['phone'];
+                $city_id = @$_POST['city_id'];
+                if (!empty($name) && !empty($phone) && !empty($city_id)) {
+                    $data = [
+                        'name' => $name,
+                        'phone' => $phone,
+                        'city_id' => $city_id
+                    ];
+                    if (isset($_GET['id'])) {
+                        if ($this->model->editHotelByID($data, $_GET['id'])) {
+                            echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully'));
+                        } else {
+                            echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                        }
                     } else {
-                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                        echo json_encode(array('status' => 'false', 'data' => 'no ID provided to edit hotel !!'));
                     }
                 } else {
-                    echo json_encode(array('status' => 'false', 'data' => 'no ID provided to edit hotel !!'));
+                    echo json_encode(array('status' => 'false', 'data' => 'please enter all the data'));
                 }
             } else {
                 echo json_encode(array('status' => 'false', 'data' => 'there is no city in this name'));
@@ -197,23 +202,27 @@ class HotelsController
             foreach ($cities as $city) {
                 array_push($citiesID, $city['id']);
             }
-            if (in_array($_POST['city_id'], $citiesID)) {
-                $name = $_POST['name'];
-                $phone = $_POST['phone'];
-                $city_id = $_POST['city_id'];
-                $data = [
-                    'name' => $name,
-                    'phone' => $phone,
-                    'city_id' => $city_id
-                ];
-                if (isset($_GET['name'])) {
-                    if ($this->model->editHotelByName($data, $_GET['name'])) {
-                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
+            if (in_array(@$_POST['city_id'], $citiesID)) {
+                $name = @$_POST['name'];
+                $phone = @$_POST['phone'];
+                $city_id = @$_POST['city_id'];
+                if (!empty($name) && !empty($phone) && !empty($city_id)) {
+                    $data = [
+                        'name' => $name,
+                        'phone' => $phone,
+                        'city_id' => $city_id
+                    ];
+                    if (isset($_GET['hotelName'])) {
+                        if ($this->model->editHotelByName($data, $_GET['hotelName'])) {
+                            echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
+                        } else {
+                            echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                        }
                     } else {
-                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                        echo json_encode(array('status' => 'false', 'data' => 'no hotel name provided to edit hotel !!'));
                     }
                 } else {
-                    echo json_encode(array('status' => 'false', 'data' => 'no hotel name provided to edit hotel !!'));
+                    echo json_encode(array('status' => 'false', 'data' => 'please enter all the data'));
                 }
             } else {
                 echo json_encode(array('status' => 'false', 'data' => 'there is no city in this name'));
@@ -231,23 +240,27 @@ class HotelsController
             foreach ($cities as $city) {
                 array_push($citiesID, $city['id']);
             }
-            if (in_array($_POST['city_id'], $citiesID)) {
-                $name = $_POST['name'];
-                $phone = $_POST['phone'];
-                $city_id = $_POST['city_id'];
-                $data = [
-                    'name' => $name,
-                    'phone' => $phone,
-                    'city_id' => $city_id
-                ];
-                if (isset($_GET['phone'])) {
-                    if ($this->model->editHotelByPhone($data, $_GET['phone'])) {
-                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
+            if (in_array(@$_POST['city_id'], $citiesID)) {
+                $name = @$_POST['name'];
+                $phone = @$_POST['phone'];
+                $city_id = @$_POST['city_id'];
+                if (!empty($name) && !empty($phone) && !empty($city_id)) {
+                    $data = [
+                        'name' => $name,
+                        'phone' => $phone,
+                        'city_id' => $city_id
+                    ];
+                    if (isset($_GET['phone'])) {
+                        if ($this->model->editHotelByPhone($data, $_GET['phone'])) {
+                            echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
+                        } else {
+                            echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                        }
                     } else {
-                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                        echo json_encode(array('status' => 'false', 'data' => 'no phone number provided to edit hotel !!'));
                     }
                 } else {
-                    echo json_encode(array('status' => 'false', 'data' => 'no phone number provided to edit hotel !!'));
+                    echo json_encode(array('status' => 'false', 'data' => 'please enter all the data'));
                 }
             } else {
                 echo json_encode(array('status' => 'false', 'data' => 'there is no city in this nam'));
@@ -265,23 +278,27 @@ class HotelsController
             foreach ($cities as $city) {
                 array_push($citiesID, $city['id']);
             }
-            if (in_array($_POST['city_id'], $citiesID)) {
-                $name = $_POST['name'];
-                $phone = $_POST['phone'];
-                $city_id = $_POST['city_id'];
-                $data = [
-                    'name' => $name,
-                    'phone' => $phone,
-                    'city_id' => $city_id
-                ];
-                if (isset($_GET['cityName'])) {
-                    if ($this->model->editHotelByCity($data, $_GET['cityName'])) {
-                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
+            if (in_array(@$_POST['city_id'], $citiesID)) {
+                $name = @$_POST['name'];
+                $phone = @$_POST['phone'];
+                $city_id = @$_POST['city_id'];
+                if (!empty($name) && !empty($phone) && !empty($city_id)) {
+                    $data = [
+                        'name' => $name,
+                        'phone' => $phone,
+                        'city_id' => $city_id
+                    ];
+                    if (isset($_GET['cityName'])) {
+                        if ($this->model->editHotelByCity($data, $_GET['cityName'])) {
+                            echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
+                        } else {
+                            echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                        }
                     } else {
-                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                        echo json_encode(array('status' => 'false', 'data' => 'no City name provided to edit hotel !!'));
                     }
                 } else {
-                    echo json_encode(array('status' => 'false', 'data' => 'no City name provided to edit hotel !!'));
+                    echo json_encode(array('status' => 'false', 'data' => 'please enter all the data'));
                 }
             } else {
                 echo json_encode(array('status' => 'false', 'data' => 'there is no city in this name'));
@@ -293,22 +310,16 @@ class HotelsController
     public function deleteHotel()
     {
         if (isset($_GET['id'])) {
-            if($this->model->deleteHotel($_GET['id'])){
-                echo json_encode(array('status' => 'true', 'data' => 'Hotel data has been deleted successfully'));
-            }else{
-                echo json_encode(array('status' => 'false', 'data' => 'some thing went wrong!!'));
+            $hotels = $this->model->getAllHotels();
+            $allID = array();
+            foreach ($hotels as $hotel) {
+                array_push($allID, $hotel['id']);
             }
-        } else {
-            echo json_encode(array('status' => 'false', 'data' => 'no ID provided to delete hotel !!'));
-        }
-    }
-    public function deleteHotelByCity()
-    {
-        if (isset($_GET['cityName'])) {
-            if ($this->model->deleteHotelByItsCity($_GET['cityName'])) {
+            if (in_array($_GET['id'], $allID)) {
+                $this->model->deleteHotel($_GET['id']);
                 echo json_encode(array('status' => 'true', 'data' => 'Hotel data has been deleted successfully'));
             } else {
-                echo json_encode(array('status' => 'false', 'data' => 'there is something wrong please try again!!'));
+                echo json_encode(array('status' => 'false', 'data' => 'some thing went wrong!!'));
             }
         } else {
             echo json_encode(array('status' => 'false', 'data' => 'no ID provided to delete hotel !!'));

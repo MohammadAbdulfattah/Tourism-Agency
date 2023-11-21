@@ -45,7 +45,7 @@ class BookingModel
     {
         return $this->db->get('booking');
     }
-    public function getBookingBySpcInfo()
+    public function getBookingBySpcInfo($conditions)
     {
         //condition : column = condition;
         // if the value is string do not forget to put ''
@@ -57,10 +57,10 @@ class BookingModel
                     $sql .= ' AND ';
                 }
             }
+            $sql = rtrim($sql, 'AND ');
+            $query = "SELECT * FROM booking WHERE " .$sql;
+            return $this->db->rawQuery($query);
         }
-        $sql = rtrim($sql, 'AND ');
-        $query = "SELECT * FROM booking WHERE " . $sql;
-        return $this->db->rawQuery($query);
     }
     public function getBookingByID($id)
     {
@@ -73,8 +73,6 @@ class BookingModel
         foreach ($hotels as $hotel) {
             if ($hotelName == $hotel['name']) {
                 $hotel_id = $hotel['id'];
-            } else {
-                echo json_encode(array('status' => 'false','message' => 'there is no hotel in this name'));
             }
         }
         $this->db->where("hotel_id", $hotel_id);
