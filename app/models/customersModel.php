@@ -1,14 +1,11 @@
 <?php
-// namespace app\models;
- 
 Class customersModel{
     private $db;
     public function __construct($db)
     {
         $this->db=$db;
     }
-    public function addCustomer($data)
-    {
+    public function addCustomer($data){
         return $this->db->insert('customers',$data);
     }
     public function getCustomer()
@@ -19,11 +16,7 @@ Class customersModel{
     {
         return $this->db->where('id',$id)->getOne('customers');
     }
-    // public function getCustomerByname($name)
-    // {
-    //     return $this->db->where('name',$name)->getOne('customers');
-    // }
-    public function searchCustomer($condition){
+    public function getCustomerByname($condition){
         $this->db->where('name',$condition,'LIKE');
         return $this->db->get('customers');
     }
