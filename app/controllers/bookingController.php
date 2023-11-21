@@ -154,23 +154,28 @@ class BookingController
             foreach ($hotels as $hotel) {
                 array_push($hotelsID, $hotel['id']);
             }
-            if (in_array($_POST['customer_id'], $customersID)) {
-                if (in_array($_POST['hotel_id'], $hotelsID)) {
-                    $customer_id = $_POST['customer_id'];
-                    $hotel_id = $_POST['hotel_id'];
-                    $ticket_id = $_POST['ticket_id'];
-                    $date = $_POST['date'];
-                    $data = [
-                        'customer_id' => $customer_id,
-                        'hotel_id' => $hotel_id,
-                        'ticket_id' => $ticket_id,
-                        'date' => $date
-                    ];
+            if (in_array(@$_POST['customer_id'], $customersID)) {
+                if (in_array(@$_POST['hotel_id'], $hotelsID)) {
+                    $customer_id = @$_POST['customer_id'];
+                    $hotel_id = @$_POST['hotel_id'];
+                    $ticket_id = @$_POST['ticket_id'];
+                    $date = @$_POST['date'];
+                    if (!empty($customer_id) && !empty($hotel_id) && !empty($ticket_id) && !empty($date)) {
 
-                    if ($this->model->addBooking($data)) {
-                        echo json_encode(array('status' => 'true', 'data' => 'Booking added successfully'));
+                        $data = [
+                            'customer_id' => $customer_id,
+                            'hotel_id' => $hotel_id,
+                            'ticket_id' => $ticket_id,
+                            'date' => $date
+                        ];
+
+                        if ($this->model->addBooking($data)) {
+                            echo json_encode(array('status' => 'true', 'data' => 'Booking added successfully'));
+                        } else {
+                            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+                        }
                     } else {
-                        echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+                        echo json_encode(array('status' => 'false', 'message' => 'please enter all data'));
                     }
                 } else {
                     echo json_encode(array('status' => 'false', 'message' => 'there is no hotel have this id'));
@@ -185,24 +190,28 @@ class BookingController
     public function editBooking()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $customer_id = $_POST['customer_id'];
-            $hotel_id = $_POST['hotel_id'];
-            $ticket_id = $_POST['ticket_id'];
-            $date = $_POST['date'];
-            $data = [
-                'customer_id' => $customer_id,
-                'hotel_id' => $hotel_id,
-                'ticket_id' => $ticket_id,
-                'date' => $date
-            ];
-            if (isset($_GET['id'])) {
-                if ($this->model->editBooking($data, $_GET['id'])) {
-                    echo json_encode(array('status' => 'false', 'message' => 'booking edited successfully'));
+            $customer_id = @$_POST['customer_id'];
+            $hotel_id = @$_POST['hotel_id'];
+            $ticket_id = @$_POST['ticket_id'];
+            $date = @$_POST['date'];
+            if (!empty($customer_id) && !empty($hotel_id) && !empty($ticket_id) && !empty($date)) {
+                $data = [
+                    'customer_id' => $customer_id,
+                    'hotel_id' => $hotel_id,
+                    'ticket_id' => $ticket_id,
+                    'date' => $date
+                ];
+                if (isset($_GET['id'])) {
+                    if ($this->model->editBooking($data, @$_GET['id'])) {
+                        echo json_encode(array('status' => 'false', 'message' => 'booking edited successfully'));
+                    } else {
+                        echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
+                    }
                 } else {
-                    echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
+                    echo json_encode(array('status' => 'false', 'message' => 'No Id provided'));
                 }
             } else {
-                echo json_encode(array('status' => 'false', 'message' => 'No Id provided'));
+                echo json_encode(array('status' => 'false', 'message' => 'please enter all data'));
             }
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'Invalid method request'));
@@ -211,26 +220,30 @@ class BookingController
     public function editBookingByCustomer()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $customer_id = $_POST['customer_id'];
-            $hotel_id = $_POST['hotel_id'];
-            $ticket_id = $_POST['ticket_id'];
-            $date = $_POST['date'];
-            $data = [
-                'customer_id' => $customer_id,
-                'hotel_id' => $hotel_id,
-                'ticket_id' => $ticket_id,
-                'date' => $date
-            ];
-            if (isset($_GET['customerName'])) {
-                if ($this->model->editBookingByCustomer($data, $_GET['customerName'])) {
-
-                    echo json_encode(array('status' => 'true', 'message' => 'Booking edited successfully!'));
-                    header("REFRESH:0 ; URL=" . BASE_PATH);
+            $customer_id = @$_POST['customer_id'];
+            $hotel_id = @$_POST['hotel_id'];
+            $ticket_id = @$_POST['ticket_id'];
+            $date = @$_POST['date'];
+            if (!empty($customer_id) && !empty($hotel_id) && !empty($ticket_id) && !empty($date)) {
+                $data = [
+                    'customer_id' => $customer_id,
+                    'hotel_id' => $hotel_id,
+                    'ticket_id' => $ticket_id,
+                    'date' => $date
+                ];
+                if (isset($_GET['customerName'])) {
+                    if ($this->model->editBookingByCustomer($data, @$_GET['customerName'])) {
+    
+                        echo json_encode(array('status' => 'true', 'message' => 'Booking edited successfully!'));
+                        header("REFRESH:0 ; URL=" . BASE_PATH);
+                    } else {
+                        echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
+                    }
                 } else {
-                    echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
+                    echo json_encode(array('status' => 'false', 'message' => 'No customer name provided for editing the booking'));
                 }
             } else {
-                echo json_encode(array('status' => 'false', 'message' => 'No customer name provided for editing the booking'));
+                echo json_encode(array('status' => 'false', 'message' => 'please enter all data'));
             }
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'Invalid request method'));
@@ -239,24 +252,28 @@ class BookingController
     public function editBookingByTicket()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $customer_id = $_POST['customer_id'];
-            $hotel_id = $_POST['hotel_id'];
-            $ticket_id = $_POST['ticket_id'];
-            $date = $_POST['date'];
-            $data = [
-                'customer_id' => $customer_id,
-                'hotel_id' => $hotel_id,
-                'ticket_id' => $ticket_id,
-                'date' => $date
-            ];
-            if (isset($_GET['ticket_id'])) {
-                if ($this->model->editBookingByTicket($data, $_GET['ticket_id'])) {
-                    echo json_encode(array('status' => 'true', 'message' => 'Booking edited successfully!'));
+            $customer_id = @$_POST['customer_id'];
+            $hotel_id = @$_POST['hotel_id'];
+            $ticket_id = @$_POST['ticket_id'];
+            $date = @$_POST['date'];
+            if (!empty($customer_id) && !empty($hotel_id) && !empty($ticket_id) && !empty($date)) {
+                $data = [
+                    'customer_id' => $customer_id,
+                    'hotel_id' => $hotel_id,
+                    'ticket_id' => $ticket_id,
+                    'date' => $date
+                ];
+                if (isset($_GET['ticket_id'])) {
+                    if ($this->model->editBookingByTicket($data, @$_GET['ticket_id'])) {
+                        echo json_encode(array('status' => 'true', 'message' => 'Booking edited successfully!'));
+                    } else {
+                        echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
+                    }
                 } else {
-                    echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
+                    echo json_encode(array('status' => 'false', 'message' => 'No ticket ID provided for editing the booking'));
                 }
             } else {
-                echo json_encode(array('status' => 'false', 'message' => 'No ticket ID provided for editing the booking'));
+                echo json_encode(array('status' => 'false', 'message' => 'please enter all data'));
             }
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'Invalid request method'));
@@ -265,24 +282,28 @@ class BookingController
     public function editBookingByHotel()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $customer_id = $_POST['customer_id'];
-            $hotel_id = $_POST['hotel_id'];
-            $ticket_id = $_POST['ticket_id'];
-            $date = $_POST['date'];
-            $data = [
-                'customer_id' => $customer_id,
-                'hotel_id' => $hotel_id,
-                'ticket_id' => $ticket_id,
-                'date' => $date
-            ];
-            if (isset($_GET['hotelName'])) {
-                if ($this->model->editBookingByHotel($data, $_GET['hotelName'])) {
-                    echo json_encode(array('status' => 'true', 'message' => 'Booking edited successfully!'));
+            $customer_id = @$_POST['customer_id'];
+            $hotel_id = @$_POST['hotel_id'];
+            $ticket_id = @$_POST['ticket_id'];
+            $date = @$_POST['date'];
+            if (!empty($customer_id) && !empty($hotel_id) && !empty($ticket_id) && !empty($date)) {
+                $data = [
+                    'customer_id' => $customer_id,
+                    'hotel_id' => $hotel_id,
+                    'ticket_id' => $ticket_id,
+                    'date' => $date
+                ];
+                if (isset($_GET['hotelName'])) {
+                    if ($this->model->editBookingByHotel($data, @$_GET['hotelName'])) {
+                        echo json_encode(array('status' => 'true', 'message' => 'Booking edited successfully!'));
+                    } else {
+                        echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
+                    }
                 } else {
-                    echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
+                    echo json_encode(array('status' => 'false', 'message' => 'No hotel name provided for editing the booking'));
                 }
             } else {
-                echo json_encode(array('status' => 'false', 'message' => 'No hotel name provided for editing the booking'));
+                echo json_encode(array('status' => 'false', 'message' => 'please enter all data'));
             }
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'Invalid request method'));
@@ -291,24 +312,28 @@ class BookingController
     public function editBookingByDate()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $customer_id = $_POST['customer_id'];
-            $hotel_id = $_POST['hotel_id'];
-            $ticket_id = $_POST['ticket_id'];
-            $date = $_POST['date'];
-            $data = [
-                'customer_id' => $customer_id,
-                'hotel_id' => $hotel_id,
-                'ticket_id' => $ticket_id,
-                'date' => $date
-            ];
-            if (isset($_GET['date'])) {
-                if ($this->model->editBookingByDate($data, $_GET['date'])) {
-                    echo json_encode(array('status' => 'true', 'message' => 'Booking edited successfully!'));
+            $customer_id = @$_POST['customer_id'];
+            $hotel_id = @$_POST['hotel_id'];
+            $ticket_id = @$_POST['ticket_id'];
+            $date = @$_POST['date'];
+            if (!empty($customer_id) && !empty($hotel_id) && !empty($ticket_id) && !empty($date)) {
+                $data = [
+                    'customer_id' => $customer_id,
+                    'hotel_id' => $hotel_id,
+                    'ticket_id' => $ticket_id,
+                    'date' => $date
+                ];
+                if (isset($_GET['date'])) {
+                    if ($this->model->editBookingByDate($data, @$_GET['date'])) {
+                        echo json_encode(array('status' => 'true', 'message' => 'Booking edited successfully!'));
+                    } else {
+                        echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
+                    }
                 } else {
-                    echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
+                    echo json_encode(array('status' => 'false', 'message' => 'No date provided for editing the booking'));
                 }
             } else {
-                echo json_encode(array('status' => 'false', 'message' => 'No date provided for editing the booking'));
+                echo json_encode(array('status' => 'false', 'message' => 'please enter all data'));
             }
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'Invalid request method'));
@@ -316,17 +341,26 @@ class BookingController
     }
     public function deleteBooking()
     {
-        if ($this->model->deleteBookingByID($_GET['id'])) {
-            echo json_encode(array('status' => 'true', 'message' => 'The booking has been deleted successfully'));
+        if (isset($_GET['id'])) {
+            $bookings = $this->model->getAllBooking();
+            $allID = array();
+            foreach ($bookings as $booking) {
+                array_push($allID, $booking['id']);
+            }
+            if (in_array($_GET['id'], $allID)) {
+                $this->model->deleteBookingByID($_GET['id']);
+                echo json_encode(array('status' => 'true', 'message' => 'The booking has been deleted successfully'));
+            } else {
+                echo json_encode(array('status' => 'false', 'message' => 'Their is something wrong please try again!!'));
+            }
         } else {
-            echo json_encode(array('status' => 'false', 'message' => 'Their is something wrong please try again!!'));
+            echo json_encode(array('status' => 'false', 'data' => 'no ID provided to delete hotel !!'));
         }
     }
     public function deleteBookingDate()
     {
         if ($this->model->deleteBookingByDate($_GET['date'])) {
             echo json_encode(array('status' => 'true', 'message' => 'The booking has been deleted successfully'));
-
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'Their is something wrong please try again!!'));
         }
