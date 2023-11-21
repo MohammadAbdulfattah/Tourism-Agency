@@ -35,15 +35,14 @@ class HotelsModel
         if (!empty($conditions)) {
             for ($i = 0; $i < count($conditions); $i++) {
                 $sql .= $conditions[$i];
-                for ($j = 0; $j <= $i; $j++) {
+                for ($j = 0; $j < 1; $j++) {
                     $sql .= ' AND ';
-                    break;
                 }
             }
+            $sql = rtrim($sql, 'AND ');
+            $query = "SELECT * FROM hotels WHERE " . $sql;
+            return $this->db->rawQuery($query);
         }
-        $sql = rtrim($sql, 'AND ');
-        $query = "SELECT * FROM hotels WHERE " . $sql;
-        return $this->db->rawQuery($query);
     }
     public function getHotelsByID($id)
     {
@@ -99,7 +98,7 @@ class HotelsModel
             if ($cityName == $city['name']) {
                 $city_id = $city['id'];
             } else {
-                echo "there is no city in this name ";
+                echo json_encode(array('status' => 'false', 'message' => 'there is no city in this name'));
             }
         }
         $this->db->Where('city_id', $city_id);
@@ -117,7 +116,7 @@ class HotelsModel
             if ($cityName == $city['name']) {
                 $city_id = $city['id'];
             } else {
-                echo "there is no city in this name ";
+                echo json_encode(array('status' => 'false', 'message' => 'there is no city in this name'));
             }
         }
         $this->db->Where('city_id', $city_id);

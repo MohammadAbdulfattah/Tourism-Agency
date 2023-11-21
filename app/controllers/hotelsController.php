@@ -10,7 +10,11 @@ class HotelsController
     public function getHotelCity($city_id)
     {
         $cityName = $this->model->getHotelCity($city_id);
-        return $cityName;
+        if(!empty($cityName)){
+            return $cityName;
+        }else{
+            echo "No city found";
+        }
     }
     public function allHotels()
     {
@@ -24,16 +28,15 @@ class HotelsController
             }
             echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
-            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+            echo json_encode(array('status' => 'false', 'message' => 'no data'));
         }
     }
     public function getHotelName($id)
     {
         if ($hotels = $this->model->getHotelName($id)) {
-
             echo json_encode(array('status' => 'true', 'data' => $hotels));
         } else {
-            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+            echo json_encode(array('status' => 'false', 'message' => 'there is no hotel'));
         }
     }
     public function getHotelsBySpcInfo()
@@ -54,8 +57,10 @@ class HotelsController
                 }
                 echo json_encode(array('status' => 'true', 'data' => $data));
             } else {
-                echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+                echo json_encode(array('status' => 'false', 'message' => 'no data'));
             }
+        }else{
+            echo json_encode(array('status'=>'false','message'=>' wrong request method '));
         }
     }
     public function getHotelByID($id)
@@ -70,7 +75,7 @@ class HotelsController
             }
             echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
-            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+            echo json_encode(array('status' => 'false', 'message' => 'no data'));
         }
     }
     public function getHotelsByPhone($phone)
@@ -85,7 +90,7 @@ class HotelsController
             }
             echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
-            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+            echo json_encode(array('status' => 'false', 'message' => 'no data'));
         }
     }
     public function getHotelsByCity($cityName)
@@ -100,7 +105,7 @@ class HotelsController
             }
             echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
-            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+            echo json_encode(array('status' => 'false', 'message' => 'no hotels in this city'));
         }
     }
     public function getHotelByName($name)
@@ -170,29 +175,23 @@ class HotelsController
                 ];
                 if (isset($_GET['id'])) {
                     if ($this->model->editHotelByID($data, $_GET['id'])) {
-                        echo "Hotel info edited successfully!";
-                        header("REFRESH:0 ; URL=" . BASE_PATH . 'edit');
+                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully'));
                     } else {
-                        echo "Failed to edit hotel.";
+                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
                     }
                 } else {
-?>
-                    <script>
-                        alert("no ID provided to edit hotel !!")
-                    </script>
-                <?php
+                    echo json_encode(array('status' => 'false', 'data' => 'no ID provided to edit hotel !!'));
                 }
             } else {
-                echo "there is no city in this name";
+                echo json_encode(array('status' => 'false', 'data' => 'there is no city in this name'));
             }
         } else {
-            echo "Invalid request method";
+            echo json_encode(array('status' => 'false', 'data' => 'Invalid request'));
         }
     }
     public function editHotelByName()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // $hotelInfo = $this->model->getHotelsByID($_GET['name']);
             $citiesID = array();
             $cities = $this->model->geAllCities();
             foreach ($cities as $city) {
@@ -209,23 +208,18 @@ class HotelsController
                 ];
                 if (isset($_GET['name'])) {
                     if ($this->model->editHotelByName($data, $_GET['name'])) {
-                        echo "Hotel info edited successfully!";
-                        header("REFRESH:0 ; URL=" . BASE_PATH);
+                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
                     } else {
-                        echo "Failed to edit hotel.";
+                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
                     }
                 } else {
-                ?>
-                    <script>
-                        alert("no hotel name provided to edit hotel !!")
-                    </script>
-                <?php
+                    echo json_encode(array('status' => 'false', 'data' => 'no hotel name provided to edit hotel !!'));
                 }
             } else {
-                echo "there is no city in this name";
+                echo json_encode(array('status' => 'false', 'data' => 'there is no city in this name'));
             }
         } else {
-            echo "Invalid request method";
+            echo json_encode(array('status' => 'false', 'data' => 'Invalid request method'));
         }
     }
     public function editHotelByPhone()
@@ -248,23 +242,18 @@ class HotelsController
                 ];
                 if (isset($_GET['phone'])) {
                     if ($this->model->editHotelByPhone($data, $_GET['phone'])) {
-                        echo "Hotel info edited successfully!";
-                        header("REFRESH:0 ; URL=" . BASE_PATH);
+                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
                     } else {
-                        echo "Failed to edit hotel.";
+                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
                     }
                 } else {
-                ?>
-                    <script>
-                        alert("no phone number provided to edit hotel !!")
-                    </script>
-                <?php
+                    echo json_encode(array('status' => 'false', 'data' => 'no phone number provided to edit hotel !!'));
                 }
             } else {
-                echo "there is no city in this name";
+                echo json_encode(array('status' => 'false', 'data' => 'there is no city in this nam'));
             }
         } else {
-            echo "Invalid request method";
+            echo json_encode(array('status' => 'false', 'data' => 'Invalid request method'));
         }
     }
     public function editHotelByCity()
@@ -287,67 +276,42 @@ class HotelsController
                 ];
                 if (isset($_GET['cityName'])) {
                     if ($this->model->editHotelByCity($data, $_GET['cityName'])) {
-                        echo "Hotel info edited successfully!";
-                        header("REFRESH:0 ; URL=" . BASE_PATH);
+                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
                     } else {
-                        echo "Failed to edit hotel.";
+                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
                     }
                 } else {
-                ?>
-                    <script>
-                        alert("no City name provided to edit hotel !!")
-                    </script>
-            <?php
+                    echo json_encode(array('status' => 'false', 'data' => 'no City name provided to edit hotel !!'));
                 }
             } else {
-                echo "there is no city in this name";
+                echo json_encode(array('status' => 'false', 'data' => 'there is no city in this name'));
             }
         } else {
-            echo "Invalid request method";
+            echo json_encode(array('status' => 'false', 'data' => 'Invalid request method'));
         }
     }
     public function deleteHotel()
     {
         if (isset($_GET['id'])) {
-            $this->model->deleteHotel($_GET['id'])
-
-            ?>
-            <script>
-                alert("Hotel data has been deleted successfully");
-            </script>
-        <?php
-            header("REFRESH:0 ; URL=" . BASE_PATH);
+            if($this->model->deleteHotel($_GET['id'])){
+                echo json_encode(array('status' => 'true', 'data' => 'Hotel data has been deleted successfully'));
+            }else{
+                echo json_encode(array('status' => 'false', 'data' => 'some thing went wrong!!'));
+            }
         } else {
-        ?>
-            <script>
-                alert("no ID provided to delete hotel !!")
-            </script>
-            <?php
+            echo json_encode(array('status' => 'false', 'data' => 'no ID provided to delete hotel !!'));
         }
     }
     public function deleteHotelByCity()
     {
         if (isset($_GET['cityName'])) {
             if ($this->model->deleteHotelByItsCity($_GET['cityName'])) {
-            ?>
-                <script>
-                    alert("Hotel data has been deleted successfully");
-                </script>
-            <?php
-                header("REFRESH:0 ; URL=" . BASE_PATH);
+                echo json_encode(array('status' => 'true', 'data' => 'Hotel data has been deleted successfully'));
             } else {
-            ?>
-                <script>
-                    alert("there is something wrong please try again!!")
-                </script>
-            <?php
+                echo json_encode(array('status' => 'false', 'data' => 'there is something wrong please try again!!'));
             }
         } else {
-            ?>
-            <script>
-                alert("no ID provided to delete hotel !!")
-            </script>
-<?php
+            echo json_encode(array('status' => 'false', 'data' => 'no ID provided to delete hotel !!'));
         }
     }
 }
