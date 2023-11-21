@@ -190,4 +190,5 @@ class BookingModel
         $this->db->Where('hotel_id', $hotel_id);
         $this->db->delete('booking');
     }
+    
 }

@@ -7,15 +7,18 @@ class BookingController
     {
         $this->model = $model;
     }
-    public function getBookingCustomer($customer_id){
+    public function getBookingCustomer($customer_id)
+    {
         $customerName = $this->model->getBookingCustomer($customer_id);
         return $customerName;
     }
-    public function getBookingHotel($hotel_id){
+    public function getBookingHotel($hotel_id)
+    {
         $hotelName = $this->model->getBookingHotel($hotel_id);
         return $hotelName;
     }
-    public function getBookingTicket($ticket_id){
+    public function getBookingTicket($ticket_id)
+    {
         $ticketDate = $this->model->getBookingTicket($ticket_id);
         return $ticketDate;
     }
@@ -28,7 +31,7 @@ class BookingController
                 $ticketDate = $this->getBookingTicket($booking['ticket_id']);
                 $customerName = $this->getBookingCustomer($booking['customer_id']);
                 $date = $booking['date'];
-                array_push($data, $customerName, $ticketDate, $hotelName,$date);
+                array_push($data, $customerName, $ticketDate, $hotelName, $date);
             }
             echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
@@ -56,93 +59,87 @@ class BookingController
             } else {
                 echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
             }
-            include "app/views/bookingsInfo.php";
         }
     }
     public function getBookingByID($id)
     {
         if ($bookings = $this->model->getBookingByID($id)) {
             $data = array();
-                foreach ($bookings as $booking) {
-                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
-                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
-                    $customerName = $this->getBookingCustomer($booking['customer_id']);
-                    $date = $booking['date'];
-                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
-                }
+            foreach ($bookings as $booking) {
+                $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                $customerName = $this->getBookingCustomer($booking['customer_id']);
+                $date = $booking['date'];
+                array_push($data, $customerName, $ticketDate, $hotelName, $date);
+            }
             echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/bookingsInfo.php";
     }
     public function getBookingByHotel($hotelName)
     {
         if ($bookings = $this->model->getBookingByHotel($hotelName)) {
             $data = array();
-                foreach ($bookings as $booking) {
-                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
-                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
-                    $customerName = $this->getBookingCustomer($booking['customer_id']);
-                    $date = $booking['date'];
-                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
-                }
+            foreach ($bookings as $booking) {
+                $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                $customerName = $this->getBookingCustomer($booking['customer_id']);
+                $date = $booking['date'];
+                array_push($data, $customerName, $ticketDate, $hotelName, $date);
+            }
             echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/bookingsInfo.php";
     }
     public function getBookingByCustomer($customerName)
     {
         if ($bookings = $this->model->getBookingByCustomer($customerName)) {
             $data = array();
-                foreach ($bookings as $booking) {
-                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
-                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
-                    $customerName = $this->getBookingCustomer($booking['customer_id']);
-                    $date = $booking['date'];
-                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
-                }
+            foreach ($bookings as $booking) {
+                $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                $customerName = $this->getBookingCustomer($booking['customer_id']);
+                $date = $booking['date'];
+                array_push($data, $customerName, $ticketDate, $hotelName, $date);
+            }
             echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/bookingsInfo.php";
     }
     public function getBookingByDate($date)
     {
         if ($bookings = $this->model->getBookingByDate($date)) {
             $data = array();
-                foreach ($bookings as $booking) {
-                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
-                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
-                    $customerName = $this->getBookingCustomer($booking['customer_id']);
-                    $date = $booking['date'];
-                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
-                }
+            foreach ($bookings as $booking) {
+                $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                $customerName = $this->getBookingCustomer($booking['customer_id']);
+                $date = $booking['date'];
+                array_push($data, $customerName, $ticketDate, $hotelName, $date);
+            }
             echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/bookingsInfo.php";
     }
     public function getBookingByTicket($ticket)
     {
         if ($bookings = $this->model->getBookingByTicket($ticket)) {
             $data = array();
-                foreach ($bookings as $booking) {
-                    $hotelName = $this->getBookingHotel($booking['hotel_id']);
-                    $ticketDate = $this->getBookingTicket($booking['ticket_id']);
-                    $customerName = $this->getBookingCustomer($booking['customer_id']);
-                    $date = $booking['date'];
-                    array_push($data, $customerName, $ticketDate, $hotelName, $date);
-                }
+            foreach ($bookings as $booking) {
+                $hotelName = $this->getBookingHotel($booking['hotel_id']);
+                $ticketDate = $this->getBookingTicket($booking['ticket_id']);
+                $customerName = $this->getBookingCustomer($booking['customer_id']);
+                $date = $booking['date'];
+                array_push($data, $customerName, $ticketDate, $hotelName, $date);
+            }
             echo json_encode(array('status' => 'true', 'data' => $data));
         } else {
             echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
-        include "app/views/bookingsInfo.php";
     }
     public function addBooking()
     {
@@ -157,8 +154,8 @@ class BookingController
             foreach ($hotels as $hotel) {
                 array_push($hotelsID, $hotel['id']);
             }
-            if(in_array($_POST['customer_id'],$customersID)){
-                if(in_array($_POST['hotel_id'],$hotelsID)){
+            if (in_array($_POST['customer_id'], $customersID)) {
+                if (in_array($_POST['hotel_id'], $hotelsID)) {
 
                     $customer_id = $_POST['customer_id'];
                     $hotel_id = $_POST['hotel_id'];
@@ -170,21 +167,20 @@ class BookingController
                         'ticket_id' => $ticket_id,
                         'date' => $date
                     ];
-        
+
                     if ($this->model->addBooking($data)) {
-                        echo "Booking added successfully!";
-                        header("REFRESH:0 ; URL=" . BASE_PATH);
+                        echo json_encode(array('status' => 'true', 'data' => 'Booking added successfully'));
                     } else {
-                        echo "Failed to add user.";
+                        echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
                     }
-                }else{
-                    echo "Please select a valid hotel";
+                } else {
+                    echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
                 }
-            }else{
-                echo "Please select a valid customer";
+            } else {
+                echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
             }
-        }else{
-            echo "Invalid request method";
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
         }
     }
     public function editBooking()
@@ -202,20 +198,15 @@ class BookingController
             ];
             if (isset($_GET['id'])) {
                 if ($this->model->editBooking($data, $_GET['id'])) {
-                    echo "Booking edited successfully!";
-                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                    echo json_encode(array('status' => 'false', 'message' => 'booking edited successfully'));
                 } else {
-                    echo "Failed to edit booking.";
+                    echo json_encode(array('status' => 'false', 'message' => 'filed to edit booking'));
                 }
             } else {
-?>
-                <script>
-                    alert("No ID provided for editing the booking.");
-                </script>
-            <?php
+                echo json_encode(array('status' => 'false', 'message' => 'No Id provided'));
             }
-        }else{
-            echo "Invalid request method";
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'Invalid method request'));
         }
     }
     public function editBookingByCustomer()
@@ -239,13 +230,13 @@ class BookingController
                     echo "Failed to edit booking.";
                 }
             } else {
-            ?>
+?>
                 <script>
                     alert("No customer name provided for editing the booking.");
                 </script>
             <?php
             }
-        }else{
+        } else {
             echo "Invalid request method";
         }
     }
@@ -276,7 +267,7 @@ class BookingController
                 </script>
             <?php
             }
-        }else{
+        } else {
             echo "Invalid request method";
         }
     }
@@ -307,7 +298,7 @@ class BookingController
                 </script>
             <?php
             }
-        }else{
+        } else {
             echo "Invalid request method";
         }
     }
@@ -338,7 +329,7 @@ class BookingController
                 </script>
             <?php
             }
-        }else{
+        } else {
             echo "Invalid request method";
         }
     }

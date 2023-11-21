@@ -24,14 +24,24 @@ $db = new MysqliDb(
     $config['db_name']
 );
 
+
 $bookingModel = new bookingModel($db);
 $bookingController = new bookingController($bookingModel);
 $hotelsModel = new HotelsModel($db);
 $hotelsController = new HotelsController($hotelsModel);
+$companiesModel = new companiesModel($db);
+$companiesController = new companiesController($hotelsModel);
 $rateController = new RatesController($db);
 $adminController = new AdminsController($db);
+$ticketController = new TicketsController($db);
+$customerController = new customersController($db);
+$customersModel = new customersModel($db);
+$citiesController = new citiesController($db);
+$citiesModel = new citiesModel($db);
+
+
 switch ($request) {
-    case BASE_PATH:
+    case BASE_PATH.'allHotels':
         $hotelsController->allHotels();
         break;
     case BASE_PATH . 'showHotel?id=' . @$_GET['id']:
@@ -79,41 +89,53 @@ switch ($request) {
     case BASE_PATH . 'showBookingSpc':
         $bookingController->getBookingBySpcInfo();
         break;
-    case BASE_PATH . 'showBookingByID?id=' .@$_GET['id']:
+    case BASE_PATH . 'showBookingByID?id=' . @$_GET['id']:
         $bookingController->getBookingByID($_GET['id']);
         break;
-    case BASE_PATH . 'showBookingByHotel?hotelName=' .@$_GET['hotelName']:
+    case BASE_PATH . 'showBookingByHotel?hotelName=' . @$_GET['hotelName']:
         $bookingController->getBookingByHotel($_GET['hotelName']);
         break;
-    case BASE_PATH . 'showBookingByCustomer?customerName=' .@$_GET['customerName']:
+    case BASE_PATH . 'showBookingByCustomer?customerName=' . @$_GET['customerName']:
         $bookingController->getBookingByCustomer($_GET['customerName']);
         break;
-    case BASE_PATH . 'showBookingByDate?date=' .@$_GET['date']:
+    case BASE_PATH . 'showBookingByDate?date=' . @$_GET['date']:
         $bookingController->getBookingByDate($_GET['date']);
         break;
-    case BASE_PATH . 'showBookingByTicket?ticket_id=' .@$_GET['ticket_id']:
+    case BASE_PATH . 'showBookingByTicket?ticket_id=' . @$_GET['ticket_id']:
         $bookingController->getBookingByTicket($_GET['ticket_id']);
         break;
     case BASE_PATH . 'addBooking':
         $bookingController->addBooking();
         break;
-    case BASE_PATH . 'editBooking?id='.@$_GET['id']:
+    case BASE_PATH . 'editBooking?id=' . @$_GET['id']:
         $bookingController->editBooking();
         break;
-    case BASE_PATH . 'editBookingByCustomer?customerName='.@$_GET['customerName']:
+    case BASE_PATH . 'editBookingByCustomer?customerName=' . @$_GET['customerName']:
         $bookingController->editBookingByCustomer();
         break;
-    case BASE_PATH . 'editByTicket?ticket_id='.@$_GET['ticket_id']:
+    case BASE_PATH . 'editByTicket?ticket_id=' . @$_GET['ticket_id']:
         $bookingController->editBookingByTicket();
         break;
-    case BASE_PATH . 'editBookingByHotel?hotelName='.@$_GET['hotelName']:
+    case BASE_PATH . 'editBookingByHotel?hotelName=' . @$_GET['hotelName']:
         $bookingController->editBookingByHotel();
         break;
-    case BASE_PATH . 'editBookingByDate?=date'.@$_GET['date']:
+    case BASE_PATH . 'editBookingByDate?=date' . @$_GET['date']:
         $bookingController->editBookingByDate();
         break;
-    case BASE_PATH . 'deleteBooking?=id'.@$_GET['id']:
+    case BASE_PATH . 'deleteBooking?=id' . @$_GET['id']:
         $bookingController->deleteBooking();
+        break;
+    case BASE_PATH . 'allCompanies':
+        $companiesController->allCompanies();
+        break;
+    case BASE_PATH . 'addCompany':
+        $companiesController->addCompany();
+        break;
+    case BASE_PATH . 'editCompany?id=' . @$_GET['id']:
+        $companiesController->editCompany();
+        break;
+    case BASE_PATH . 'deleteCompany?id=' . @$_GET['id']:
+        $companiesController->deleteCompany();
         break;
     case BASE_PATH . 'viewrate':
         $rateController->getAllRates();
@@ -139,7 +161,7 @@ switch ($request) {
     case BASE_PATH . 'editratebycustomer?customer_id=' . @$_GET['customer_id']:
         $rateController->editRatesByCustomerID();
         break;
-    case BASE_PATH . 'deleterate?customer_id=' . @$_GET['customer_id'].'&hotel_id='. @$_GET['hotel_id']:
+    case BASE_PATH . 'deleterate?customer_id=' . @$_GET['customer_id'] . '&hotel_id=' . @$_GET['hotel_id']:
         $rateController->deleteRates();
         break;
     case BASE_PATH . 'register':
@@ -153,6 +175,57 @@ switch ($request) {
         break;
     case BASE_PATH . 'editadmin?id=' . @$_GET['id']:
         $adminController->updateAdmins($_GET['id']);
+        break;
+    case BASE_PATH . 'showallticket':
+        $ticketController->getAllTicket();
+        break;
+    case BASE_PATH . 'showticketsbycompanyid?id=' . @$_GET['id']:
+        $ticketController->getTicketsByCompanyId($_GET['id']);
+        break;
+    case BASE_PATH . 'showticketsbycityid?id=' . @$_GET['id']:
+        $ticketController->getTicketsByCityId($_GET['id']);
+        break;
+    case BASE_PATH . 'addtickets':
+        $ticketController->addTickets();
+        break;
+    case BASE_PATH . 'editticket?id=' . @$_GET['id']:
+        $ticketController->editTickets();
+        break;
+    case BASE_PATH . 'showCustomers':
+        $customerController->showCustomers();
+        break;
+    case BASE_PATH . 'addCustomer':
+        $customerController->addCustomer();
+        break;
+    case BASE_PATH . 'deleteCustomer?id='. $_GET['id']:
+        $customerController->deleteCustomer($_GET['id']);
+        break;
+    case BASE_PATH . 'updateCustomer?id='. $_GET['id']:
+        $customerController->updateCustomer($_GET['id']);
+        break;
+    /*case BASE_PATH . 'getCustomerByid?id' . $_GET['id']:
+        $customerController->getCustomerByid($_GET['id']);
+        break;
+    case BASE_PATH . 'getCustomerByname?name' . $_GET['name']:
+        $customerController->getCustomerByname($_GET['name']);
+        break;*/
+    case BASE_PATH . 'showCities':
+        $citiesController->showCities();
+        break;
+    case BASE_PATH . 'addCity':
+        $citiesController->addCity();
+        break;
+    case BASE_PATH . 'updateCity?id' . $_GET['id']:
+        $citiesController->updateCity($_GET['id']);
+        break;
+    case BASE_PATH . 'deleteCity?id' . $_GET['id']:
+        $citiesController->deleteCity($_GET['id']);
+        break;
+    case BASE_PATH . 'getCityByid?id' . $_GET['id']:
+        $citiesController->getCityByid($_GET['id']);
+        break;
+    case BASE_PATH . 'getCityByname?name' . $_GET['name']:
+        $citiesController->getCityByname($_GET['name']);
         break;
     default:
         echo "action not found!!";
