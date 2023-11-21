@@ -1,5 +1,4 @@
 <?php
-
 class HotelsModel
 {
     public $db;
@@ -7,9 +6,27 @@ class HotelsModel
     {
         $this->db = $db;
     }
+    public function getHotelCity($city_id)
+    {
+        $this->db->Where('id', $city_id);
+        $cities = $this->db->get('cities');
+        foreach ($cities as $city) {
+            $cityName = $city['name'];
+            return $cityName;
+        }
+    }
+    public function geAllCities()
+    {
+        $cities = $this->db->get('cities');
+        return $cities;
+    }
     public function getAllHotels()
     {
         return $this->db->get('hotels');
+    }
+    public function getHotelName($id)
+    {
+        return $this->db->rawQuery("SELECT name FROM hotels WHERE id = $id");
     }
     public function getHotelBySpcInfo($conditions = array())
     {
@@ -18,15 +35,14 @@ class HotelsModel
         if (!empty($conditions)) {
             for ($i = 0; $i < count($conditions); $i++) {
                 $sql .= $conditions[$i];
-                for ($j = 0; $j <= $i; $j++) {
+                for ($j = 0; $j < 1; $j++) {
                     $sql .= ' AND ';
-                    break;
                 }
             }
+            $sql = rtrim($sql, 'AND ');
+            $query = "SELECT * FROM hotels WHERE " . $sql;
+            return $this->db->rawQuery($query);
         }
-        $sql = rtrim($sql, 'AND ');
-        $query = "SELECT * FROM hotels WHERE " . $sql;
-        return $this->db->rawQuery($query);
     }
     public function getHotelsByID($id)
     {
@@ -49,6 +65,8 @@ class HotelsModel
         foreach ($cities as $city) {
             if ($cityName == $city['name']) {
                 $city_id = $city['id'];
+            } else {
+                echo "there is no city in this name ";
             }
         }
         $this->db->Where('city_id', $city_id);
@@ -79,6 +97,8 @@ class HotelsModel
         foreach ($cities as $city) {
             if ($cityName == $city['name']) {
                 $city_id = $city['id'];
+            } else {
+                echo json_encode(array('status' => 'false', 'message' => 'there is no city in this name'));
             }
         }
         $this->db->Where('city_id', $city_id);
@@ -95,6 +115,8 @@ class HotelsModel
         foreach ($cities as $city) {
             if ($cityName == $city['name']) {
                 $city_id = $city['id'];
+            } else {
+                echo json_encode(array('status' => 'false', 'message' => 'there is no city in this name'));
             }
         }
         $this->db->Where('city_id', $city_id);

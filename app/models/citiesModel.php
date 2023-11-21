@@ -1,4 +1,5 @@
 <?php
+
 Class citiesModel{
     private $db;
     public function __construct($db){
@@ -24,5 +25,6 @@ Class citiesModel{
     public function getCityByname($condition){
         $this->db->where('name',$condition,'LIKE');
         return $this->db->get('cities');
+
     }
 }

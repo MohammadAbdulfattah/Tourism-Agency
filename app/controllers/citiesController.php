@@ -23,6 +23,7 @@ Class citiesController{
 
             $data = ['name' => $city ,'country' => $country];
             $this->model->addCity($data);
+          
             if($data){
                 if(empty($city)){
                     echo (json_encode(array('status' => 'false' , 'message' => 'enter city name!')));
@@ -85,4 +86,5 @@ Class citiesController{
             echo json_encode(array('status' => 'false' , 'message' => 'something went wrong !'));
         }
     } 
+
 }

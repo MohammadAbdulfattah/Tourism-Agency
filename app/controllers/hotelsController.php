@@ -7,150 +7,311 @@ class HotelsController
     {
         $this->model = $model;
     }
-    public function index()
+    public function getHotelCity($city_id)
     {
-        return $this->model->getAllHotels();
+        $cityName = $this->model->getHotelCity($city_id);
+        if(!empty($cityName)){
+            return $cityName;
+        }else{
+            echo "No city found";
+        }
+    }
+    public function allHotels()
+    {
+        if ($hotels = $this->model->getAllHotels()) {
+            $data = array();
+            foreach ($hotels as $hotel) {
+                $name = $hotel['name'];
+                $phone = $hotel['phone'];
+                $cityName = $this->getHotelCity($hotel['city_id']);
+                array_push($data, $name, $phone, $cityName);
+            }
+            echo json_encode(array('status' => 'true', 'data' => $data));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'no data'));
+        }
+    }
+    public function getHotelName($id)
+    {
+        if ($hotels = $this->model->getHotelName($id)) {
+            echo json_encode(array('status' => 'true', 'data' => $hotels));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is no hotel'));
+        }
     }
     public function getHotelsBySpcInfo()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conditions = array();
             foreach ($_POST as $key => $value) {
-                $condition = "$key = $value";
+                $condition = "$key = '$value'";
                 array_push($conditions, $condition);
             }
-            return $this->model->getHotelBySpcInfo($conditions);
+            if ($hotels = $this->model->getHotelBySpcInfo($conditions)) {
+                $data = array();
+                foreach ($hotels as $hotel) {
+                    $name = $hotel['name'];
+                    $phone = $hotel['phone'];
+                    $cityName = $this->getHotelCity($hotel['city_id']);
+                    array_push($data, $name, $phone, $cityName);
+                }
+                echo json_encode(array('status' => 'true', 'data' => $data));
+            } else {
+                echo json_encode(array('status' => 'false', 'message' => 'no data'));
+            }
+        }else{
+            echo json_encode(array('status'=>'false','message'=>' wrong request method '));
         }
     }
     public function getHotelByID($id)
     {
-        return $this->model->getHotelsByID($id);
+        if ($hotels = $this->model->getHotelsByID($id)) {
+            $data = array();
+            foreach ($hotels as $hotel) {
+                $name = $hotel['name'];
+                $phone = $hotel['phone'];
+                $cityName = $this->getHotelCity($hotel['city_id']);
+                array_push($data, $name, $phone, $cityName);
+            }
+            echo json_encode(array('status' => 'true', 'data' => $data));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'no data'));
+        }
     }
     public function getHotelsByPhone($phone)
     {
-        $bookings = $this->model->getHotelByPhone($phone);
+        if ($hotels = $this->model->getHotelByPhone($phone)) {
+            $data = array();
+            foreach ($hotels as $hotel) {
+                $name = $hotel['name'];
+                $phone = $hotel['phone'];
+                $cityName = $this->getHotelCity($hotel['city_id']);
+                array_push($data, $name, $phone, $cityName);
+            }
+            echo json_encode(array('status' => 'true', 'data' => $data));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'no data'));
+        }
     }
     public function getHotelsByCity($cityName)
     {
-        return $this->model->getHotelsByCity($cityName);
+        if ($hotels = $this->model->getHotelsByCity($cityName)) {
+            $data = array();
+            foreach ($hotels as $hotel) {
+                $name = $hotel['name'];
+                $phone = $hotel['phone'];
+                $cityName = $this->getHotelCity($hotel['city_id']);
+                array_push($data, $name, $phone, $cityName);
+            }
+            echo json_encode(array('status' => 'true', 'data' => $data));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'no hotels in this city'));
+        }
     }
     public function getHotelByName($name)
     {
-        $bookings = $this->model->getHotelByName($name);
+        if ($hotels = $this->model->getHotelByName($name)) {
+            $data = array();
+            foreach ($hotels as $hotel) {
+                $name = $hotel['name'];
+                $phone = $hotel['phone'];
+                $cityName = $this->getHotelCity($hotel['city_id']);
+                array_push($data, $name, $phone, $cityName);
+            }
+            echo json_encode(array('status' => 'true', 'data' => $data));
+        } else {
+            echo json_encode(array('status' => 'false', 'message' => 'there is some thing wrong'));
+        }
     }
     public function addHotel()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'];
-            $phone = $_POST['phone'];
-            $city_id = $_POST['city_id'];
-            $data = [
-                'name' => $name,
-                'phone' => $phone,
-                'city_id' => $city_id
-            ];
-
-            if ($this->model->addHotel($data)) {
-                echo "Hotel added successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-            } else {
-                echo "Failed to add hotel.";
+            $citiesID = array();
+            $cities = $this->model->geAllCities();
+            foreach ($cities as $city) {
+                array_push($citiesID, $city['id']);
             }
+            if (in_array($_POST['city_id'], $citiesID)) {
+                $name = $_POST['name'];
+                $phone = $_POST['phone'];
+                $city_id = $_POST['city_id'];
+
+                $data = [
+                    'name' => $name,
+                    'phone' => $phone,
+                    'city_id' => $city_id
+                ];
+
+                if ($this->model->addHotel($data)) {
+                    echo "Hotel added successfully!";
+                    header("REFRESH:0 ; URL=" . BASE_PATH);
+                } else {
+                    echo "Failed to add hotel.";
+                }
+            } else {
+                echo "there is no city in this name";
+            }
+        } else {
+            echo "Invalid request method";
         }
     }
     public function editHotel()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // $hotelInfo = $this->model->getHotelsByID($_GET['id']);
-            $name = $_POST['name'];
-            $phone = $_POST['phone'];
-            $city_id = $_POST['city_id'];
-            $data = [
-                'name' => $name,
-                'phone' => $phone,
-                'city_id' => $city_id
-            ];
-            if ($this->model->editHotelByID($data, $_GET['id'])) {
-                echo "Hotel info edited successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-
-            } else {
-                echo "Failed to edit hotel.";
+            $citiesID = array();
+            $cities = $this->model->geAllCities();
+            foreach ($cities as $city) {
+                array_push($citiesID, $city['id']);
             }
+            if (in_array($_POST['city_id'], $citiesID)) {
+                $name = $_POST['name'];
+                $phone = $_POST['phone'];
+                $city_id = $_POST['city_id'];
+                $data = [
+                    'name' => $name,
+                    'phone' => $phone,
+                    'city_id' => $city_id
+                ];
+                if (isset($_GET['id'])) {
+                    if ($this->model->editHotelByID($data, $_GET['id'])) {
+                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully'));
+                    } else {
+                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                    }
+                } else {
+                    echo json_encode(array('status' => 'false', 'data' => 'no ID provided to edit hotel !!'));
+                }
+            } else {
+                echo json_encode(array('status' => 'false', 'data' => 'there is no city in this name'));
+            }
+        } else {
+            echo json_encode(array('status' => 'false', 'data' => 'Invalid request'));
         }
     }
     public function editHotelByName()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // $hotelInfo = $this->model->getHotelsByID($_GET['name']);
-            $name = $_POST['name'];
-            $phone = $_POST['phone'];
-            $city_id = $_POST['city_id'];
-            $data = [
-                'name' => $name,
-                'phone' => $phone,
-                'city_id' => $city_id
-            ];
-            if ($this->model->editHotelByName($data, $_GET['name'])) {
-                echo "Hotel info edited successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-
-            } else {
-                echo "Failed to edit hotel.";
+            $citiesID = array();
+            $cities = $this->model->geAllCities();
+            foreach ($cities as $city) {
+                array_push($citiesID, $city['id']);
             }
+            if (in_array($_POST['city_id'], $citiesID)) {
+                $name = $_POST['name'];
+                $phone = $_POST['phone'];
+                $city_id = $_POST['city_id'];
+                $data = [
+                    'name' => $name,
+                    'phone' => $phone,
+                    'city_id' => $city_id
+                ];
+                if (isset($_GET['name'])) {
+                    if ($this->model->editHotelByName($data, $_GET['name'])) {
+                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
+                    } else {
+                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                    }
+                } else {
+                    echo json_encode(array('status' => 'false', 'data' => 'no hotel name provided to edit hotel !!'));
+                }
+            } else {
+                echo json_encode(array('status' => 'false', 'data' => 'there is no city in this name'));
+            }
+        } else {
+            echo json_encode(array('status' => 'false', 'data' => 'Invalid request method'));
         }
     }
     public function editHotelByPhone()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // $hotelInfo = $this->model->getHotelsByID($_GET['name']);
-            $name = $_POST['name'];
-            $phone = $_POST['phone'];
-            $city_id = $_POST['city_id'];
-            $data = [
-                'name' => $name,
-                'phone' => $phone,
-                'city_id' => $city_id
-            ];
-            var_dump($_GET);
-            if ($this->model->editHotelByPhone($data, $_GET['phone'])) {
-                echo "Hotel info edited successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-
-            } else {
-                echo "Failed to edit hotel.";
+            $citiesID = array();
+            $cities = $this->model->geAllCities();
+            foreach ($cities as $city) {
+                array_push($citiesID, $city['id']);
             }
+            if (in_array($_POST['city_id'], $citiesID)) {
+                $name = $_POST['name'];
+                $phone = $_POST['phone'];
+                $city_id = $_POST['city_id'];
+                $data = [
+                    'name' => $name,
+                    'phone' => $phone,
+                    'city_id' => $city_id
+                ];
+                if (isset($_GET['phone'])) {
+                    if ($this->model->editHotelByPhone($data, $_GET['phone'])) {
+                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
+                    } else {
+                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                    }
+                } else {
+                    echo json_encode(array('status' => 'false', 'data' => 'no phone number provided to edit hotel !!'));
+                }
+            } else {
+                echo json_encode(array('status' => 'false', 'data' => 'there is no city in this nam'));
+            }
+        } else {
+            echo json_encode(array('status' => 'false', 'data' => 'Invalid request method'));
         }
     }
     public function editHotelByCity()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // $hotelInfo = $this->model->getHotelsByID($_GET['name']);
-            $name = $_POST['name'];
-            $phone = $_POST['phone'];
-            $city_id = $_POST['city_id'];
-            $data = [
-                'name' => $name,
-                'phone' => $phone,
-                'city_id' => $city_id
-            ];
-            var_dump($_GET);
-            if ($this->model->editHotelByCity($data, $_GET['cityName'])) {
-                echo "Hotel info edited successfully!";
-                // header("REFRESH:0 ; URL=".BASE_PATH);
-
-            } else {
-                echo "Failed to edit hotel.";
+            $citiesID = array();
+            $cities = $this->model->geAllCities();
+            foreach ($cities as $city) {
+                array_push($citiesID, $city['id']);
             }
+            if (in_array($_POST['city_id'], $citiesID)) {
+                $name = $_POST['name'];
+                $phone = $_POST['phone'];
+                $city_id = $_POST['city_id'];
+                $data = [
+                    'name' => $name,
+                    'phone' => $phone,
+                    'city_id' => $city_id
+                ];
+                if (isset($_GET['cityName'])) {
+                    if ($this->model->editHotelByCity($data, $_GET['cityName'])) {
+                        echo json_encode(array('status' => 'true', 'data' => 'Hotel info edited successfully!'));
+                    } else {
+                        echo json_encode(array('status' => 'false', 'data' => 'Failed to edit hotel'));
+                    }
+                } else {
+                    echo json_encode(array('status' => 'false', 'data' => 'no City name provided to edit hotel !!'));
+                }
+            } else {
+                echo json_encode(array('status' => 'false', 'data' => 'there is no city in this name'));
+            }
+        } else {
+            echo json_encode(array('status' => 'false', 'data' => 'Invalid request method'));
         }
     }
-    public function deleteHotel($id)
+    public function deleteHotel()
     {
-        $this->model->deleteHotel($_GET['id']);
+        if (isset($_GET['id'])) {
+            if($this->model->deleteHotel($_GET['id'])){
+                echo json_encode(array('status' => 'true', 'data' => 'Hotel data has been deleted successfully'));
+            }else{
+                echo json_encode(array('status' => 'false', 'data' => 'some thing went wrong!!'));
+            }
+        } else {
+            echo json_encode(array('status' => 'false', 'data' => 'no ID provided to delete hotel !!'));
+        }
     }
-    public function deleteHotelByCity($cityName)
+    public function deleteHotelByCity()
     {
-
-        $this->model->deleteHotelByItsCity($_GET['cityName']);
+        if (isset($_GET['cityName'])) {
+            if ($this->model->deleteHotelByItsCity($_GET['cityName'])) {
+                echo json_encode(array('status' => 'true', 'data' => 'Hotel data has been deleted successfully'));
+            } else {
+                echo json_encode(array('status' => 'false', 'data' => 'there is something wrong please try again!!'));
+            }
+        } else {
+            echo json_encode(array('status' => 'false', 'data' => 'no ID provided to delete hotel !!'));
+        }
     }
 }

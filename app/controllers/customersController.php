@@ -70,7 +70,7 @@ class customersController
     }
     public function getCustomerByname($name){
         $customers = $this->model->getCustomerByname($name);
-        if ($customers) {;
+        if ($customers) {
             echo (json_encode(array('status' => 'true', 'data' => $customers)));
         } else {
             echo (json_encode(array('status' => 'false', 'message' => 'data wich entered is uncorrect')));
@@ -98,4 +98,5 @@ class customersController
             }
         }
     }
+
 }

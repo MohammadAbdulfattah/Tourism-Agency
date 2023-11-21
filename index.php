@@ -11,6 +11,20 @@ $request = $_SERVER['REQUEST_URI'];
 define('BASE_PATH', '/Tourism-Agency/');
 // echo $_SERVER['REQUEST_URI'];
 
+
+spl_autoload_register(
+    function ($class) {
+        if (file_exists("app/models/$class.php")) {
+            require "app/models/$class.php";
+        }
+        if (file_exists("app/controllers/$class.php")) {
+            require "app/controllers/$class.php";
+        }
+    }
+);
+$request = $_SERVER["REQUEST_URI"];
+define('BASE_PATH', '/mvc/');
+// echo $_SERVER['REQUEST_URI'];
 $config = require 'config/config.php';
 $db = new \MysqliDb(
     $config['db_host'],
@@ -18,6 +32,7 @@ $db = new \MysqliDb(
     $config['db_pass'],
     $config['db_name']
 );
+
 
 $customerController = new customersController($db);
 $customersModel = new customersModel($db);
@@ -58,3 +73,4 @@ switch($request)
 }
 
 ?>
+
