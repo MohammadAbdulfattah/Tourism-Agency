@@ -13,7 +13,41 @@
         public function getAdminsById($id) {
             return $this->db->where('id', $id)->getOne('admins');
         }
-
+        public function getIdByToken($token) {
+            $result = $this->db->where('token', $token)->getOne('admins');
+            foreach ($result as $key => $value) {
+                if($key == 'id'){
+                    return $value;
+                }
+            }
+        }
+        public function getTokenById($id) {
+            $result = $this->db->where('id', $id)->getOne('admins');
+            foreach ($result as $key => $value) {
+                if($key == 'token'){
+                    return $value;
+                }
+            }
+        }
+        public function getIdByEmail($email) {
+            $result = $this->db->where('email', $email)->getOne('admins');
+            foreach ($result as $key => $value) {
+                if($key == 'id'){
+                    return $value;
+                }
+            }
+        }
+        public function getToken($token) {
+            $result = $this->db->where('token', $token)->getOne('admins');
+            if(!empty($result)){
+                foreach ($result as $key => $value) {
+                    if($key == 'token'){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         public function updateAdmins($id, $data) {
             $this->db->where('id', $id);
             return $this->db->update('admins', $data);
