@@ -1,9 +1,4 @@
 <?php
-session_start();
-
-// use app\controllers\customersController;
-// use app\models\customersModel;
-// use app\controllers\citiesController;
 
 require_once __DIR__.'/app/controllers/customersController.php';
 require_once __DIR__.'/app/models/customersModel.php';
@@ -32,36 +27,33 @@ $citiesModel = new citiesModel($db);
 
 switch($request)
     {
-    
-    case BASE_PATH . 'showCustomers' : $customerController->showCustomers();
+    case BASE_PATH . 'showCustomers' : $customerController->showCustomers();//💯
     break;
-    case BASE_PATH . 'addCustomer' : $customerController->addCustomer();
+    case BASE_PATH . 'addCustomer' : $customerController->addCustomer();//💯
     break;
-    case BASE_PATH . 'deleteCustomer?id' . $_GET['id'] : $customerController->deleteCustomer($_GET['id']);
+    case BASE_PATH . 'deleteCustomer?id=' . @$_GET['id'] : $customerController->deleteCustomer($_GET['id']);//💯
     break;
-    case BASE_PATH . 'updateCustomer?id' . $_GET['id'] : $customerController->updateCustomer($_GET['id']);
+    case BASE_PATH . 'updateCustomer?id=' . @$_GET['id'] : $customerController->updateCustomer($_GET['id']);//💯
     break;
-    case BASE_PATH . 'getCustomerByid?id' . $_GET['id'] : $customerController->getCustomerByid($_GET['id']);
+    case BASE_PATH . 'getCustomerByid?id=' . @$_GET['id'] : $customerController->getCustomerByid($_GET['id']);//💯
     break;
-    case BASE_PATH . 'getCustomerByname?name' . $_GET['name'] : $customerController->getCustomerByname($_GET['name']);
+    case BASE_PATH . 'getCustomerByname?name=' . @$_GET['name'] : $customerController->getCustomerByname($_GET['name']);//💯
     break;
 
 
 
-    case BASE_PATH . 'showCities' : $citiesController->showCities();
+    case BASE_PATH . 'showCities' : $citiesController->showCities();//💯
     break;
-    case BASE_PATH . 'addCity' : $citiesController->addCity();
+    case BASE_PATH . 'addCity' : $citiesController->addCity();//💯
     break;
-    case BASE_PATH . 'updateCity?id' . $_GET['id'] : $citiesController->updateCity($_GET['id']);
+    case BASE_PATH . 'updateCity?id=' . @$_GET['id'] : $citiesController->updateCity($_GET['id']);//💯
     break;
-    case BASE_PATH . 'deleteCity?id' . $_GET['id'] : $citiesController->deleteCity($_GET['id']);
+    case BASE_PATH . 'deleteCity?id=' . @$_GET['id'] : $citiesController->deleteCity($_GET['id']);//💯
     break;
-    case BASE_PATH . 'getCityByid?id' . $_GET['id'] : $citiesController->getCityByid($_GET['id']);
+    case BASE_PATH . 'getCityByid?id=' . @$_GET['id'] : $citiesController->getCityByid($_GET['id']);//💯
     break;
-    case BASE_PATH . 'getCityByname?name' . $_GET['name'] : $citiesController->getCityByname($_GET['name']);
-    
-
-    
+    case BASE_PATH . 'getCityByname?name=' . @$_GET['name'] : $citiesController->getCityByname($_GET['name']);
+    break;    
     default : break;
 }
 
