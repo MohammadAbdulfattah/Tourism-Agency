@@ -12,7 +12,8 @@ class AdminsController
 
     public function deleteAdmins($id)
     {
-        if ($this->model->deleteAdmins($id)) {
+        $result = $this->model->deleteAdmins($id);
+        if ($result) {
             echo json_encode(array('status' => 'true', 'messege' => 'Admin deleted successfully!'));
         } else {
             echo json_encode(array('status' => 'false', 'messege' => 'Failed to delete Admin.'));
@@ -22,12 +23,36 @@ class AdminsController
     public function updateAdmins($id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'];
-            $password = $_POST['password'];
-            $data = [
-                'name' => $name,
-                'password' => $password,
-            ];
+            if (isset($_POST['name']) && isset($_POST['password'])) {
+                $name = $_POST['name'];
+                $password = $_POST['password'];
+                if (strlen($password) >= 8) {
+                    $data = [
+                        'password' => $password
+                    ];
+                } else {
+                    echo json_encode(array('status' => 'false', 'messege' => 'The Password is Less Than 8 Character'));
+                    return;
+                }
+                $data = [
+                    'name' => $name,
+                    'password' => $password
+                ];
+            } else if (isset($_POST['name'])) {
+                $name = $_POST['name'];
+                $data = [
+                    'name' => $name
+                ];
+            } else if (isset($_POST['password'])) {
+                $password = $_POST['password'];
+                if (strlen($password) >= 8) {
+                    $data = [
+                        'password' => $password
+                    ];
+                } else {
+                    echo json_encode(array('status' => 'false', 'messege' => 'The Password is Less Than 8 Character'));
+                }
+            }
 
             if ($this->model->updateAdmins($id, $data)) {
                 echo json_encode(array('status' => 'true', 'messege' => 'Admin updated successfully!'));
@@ -97,8 +122,12 @@ class AdminsController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
             $password = $_POST['password'];
-            if ($this->model->searchAdmins($email, $password)) {
-                echo json_encode(array('status' => 'true', 'messege' => 'You Can Access'));
+            if ($this->model->searchEmailAdmins($email)) {
+                if ($this->model->searchPassAdmins($password)) {
+                    echo json_encode(array('status' => 'true', 'messege' => 'You Can Access'));
+                } else {
+                    echo json_encode(array('status' => 'false', 'messege' => 'Incroect Password'));
+                }
             } else {
                 echo json_encode(array('status' => 'false', 'messege' => 'The email you entered isn’t connected to an account'));
             }
