@@ -1,5 +1,5 @@
 <?php
-// namespace app\models;
+
 Class citiesModel{
     private $db;
     public function __construct($db){
@@ -22,8 +22,9 @@ Class citiesModel{
         $this->db->where('id',$id); 
         return $this->db->delete('cities');
     }
-    public function searchCity($condition){
-        $this->db->wehre('name',$condition,'LIKE');
-        return $this->db->get($condition);
+    public function getCityByname($condition){
+        $this->db->where('name',$condition,'LIKE');
+        return $this->db->get('cities');
+
     }
 }

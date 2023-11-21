@@ -1,25 +1,20 @@
 <?php
-// namespace app\controllers;
 require_once __DIR__ . '/../models/customersModel.php';
-// use app\models\customersModel;
 class customersController
 {
     private $model;
-    public function __construct($db)
-    {
+    public function __construct($db){
         $this->model = new customersModel($db);
     }
-    public function showCustomers()
-    {
+    public function showCustomers(){
         $customers = $this->model->getCustomer();
-        if ($customers) {
+        if ($customers){
             echo (json_encode(array('status' => 'true', 'data' => $customers)));
         } else {
             echo (json_encode(array('status' => 'false', 'message' => 'data wich entered is uncorrect')));
         }
     }
-    public function addCustomer()
-    {
+    public function addCustomer(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
             $phone = $_POST['phone'];
@@ -33,77 +28,56 @@ class customersController
                 'email' => $email,
             ];
             if ($this->model->addCustomer($data)) {
-
-                echo "Added successfully !";
-            } else {
+                if (empty($name)) {
+                    echo json_encode(array('status' => 'false' , 'message' => 'enter customer name!'));
+                }
+                elseif (empty($phone)) {
+                    echo json_encode(array('status' => 'false' , 'message' => 'enter customer phone!'));
+                }
+                elseif (empty($gender)) {
+                    echo json_encode(array('status' => 'false' , 'message' => 'enter customer gender!'));
+                }
+                elseif (empty($email)) {
+                    echo json_encode(array('status' => 'false' , 'message' => 'enter customer email!'));
+                }
+                elseif(!(filter_var($email, FILTER_VALIDATE_EMAIL))) {
+                echo json_encode(array('status' => 'false' , 'message' => 'uncorrect email!'));
+                } 
+                else{
+                    echo "Added successfully !";
+                }
+            }
+                else {
                 echo "Failed to add customer !";
             }
-            $result = filter_var($email, FILTER_VALIDATE_EMAIL);
-            if (!($result)) {
-                return TRUE;
-            } else {
-                return FALSE;
-            }
-            if (!isset($name)) {
-                echo "enter customer name!";
-                header('Location:' . BASE_PATH);
-            }
-            if (!isset($phone)) {
-                echo "enter customer phone!";
-                header('Location:' . BASE_PATH);
-            }
-            if (!isset($gender)) {
-                echo "enter customer gender!";
-                header('Location:' . BASE_PATH);
-            }
-            if (!isset($email)) {
-                echo "enter customer emai!";
-                header('Location:' . BASE_PATH);
-
-                ucfirst($name);
-            }
         }
     }
-    // public function showCustomers(){
-    //     if($this->model->getCustomer()){
-    //         header('Location:' . BASE_PATH);
-    //     }
-    //     else{
-    //         return FALSE;
-    //     }
-    // }
-    public function deleteCustomer($id)
-    {
+    public function deleteCustomer($id){
         if ($this->model->deleteCustomer($id)) {
-            echo "Customer deleted successfully!";
-            header('Location:' . BASE_PATH);
+            echo json_encode(array('status' => 'true' , 'message' => 'customer deleted successfully!'));
+
         } else {
-            echo "Failed to delete customer.";
+            echo json_encode(array('status' => 'false' , 'message' => 'something went wrong!'));
         }
     }
-    public function getCustomerByid($id)
-    {
-        $data = $this->model->getCustomer();
+    public function getCustomerByid($id){
+        $data = $this->model->getCustomerByid($id);
         if ($data) {
-            header('Location:' . BASE_PATH);
             echo (json_encode(array('status' => 'true', 'data' => $data)));
         } else {
-            echo (json_encode((array('status' => 'true', 'data' => "Filed get customer !"))));
+            echo (json_encode((array('status' => 'true', 'message' => "Filed get customer !"))));
         }
     }
-    public function getCustomerByname($name)
-    {
-        $customers = $this->model->getCustomer();
+    public function getCustomerByname($name){
+        $customers = $this->model->getCustomerByname($name);
         if ($customers) {
-            header('Location:' . BASE_PATH);
             echo (json_encode(array('status' => 'true', 'data' => $customers)));
         } else {
             echo (json_encode(array('status' => 'false', 'message' => 'data wich entered is uncorrect')));
         }
     }
 
-    public function updateCustomer($id)
-    {
+    public function updateCustomer($id){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
             $phone = $_POST['phone'];
@@ -117,22 +91,12 @@ class customersController
                 'email' => $email,
             ];
             if ($this->model->updateCustomer($id, $data)) {
-                echo "Customer updated successfully !";
-                header('Location:' . BASE_PATH);
-            } else {
-                echo "Filed update !";
+                echo json_encode(array('status' => 'true' , 'message' => 'customer updated successfully!'));
+            } 
+            else {
+                echo json_encode(array('status' => 'false' , 'message' => 'something went wrong!'));
             }
-        } else {
-            $this->getCustomerByid($id);
         }
     }
-    // public function searchCustomer($searchTerm){
-    //     $customer=$this->model->searchCustomer($searchTerm);
-    //     if($customer){
-    //         header('Location:' . BASE_PATH);
-    //     }
-    //     else{
-    //         return FALSE;
-    //     }
-    // }
+
 }
