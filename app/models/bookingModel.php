@@ -53,9 +53,8 @@ class BookingModel
         if (!empty($conditions)) {
             for ($i = 0; $i < count($conditions); $i++) {
                 $sql .= $conditions[$i];
-                for ($j = 0; $j <= $i; $j++) {
+                for ($j = 0; $j < 1; $j++) {
                     $sql .= ' AND ';
-                    break;
                 }
             }
         }
@@ -75,7 +74,7 @@ class BookingModel
             if ($hotelName == $hotel['name']) {
                 $hotel_id = $hotel['id'];
             } else {
-                echo "there is no hotel in this name";
+                echo json_encode(array('status' => 'false','message' => 'there is no hotel in this name'));
             }
         }
         $this->db->where("hotel_id", $hotel_id);
@@ -88,7 +87,7 @@ class BookingModel
             if ($customerName == $customer['name']) {
                 $customer_id = $customer['id'];
             } else {
-                echo "there is no customer in this name";
+                echo json_encode(array('status' => 'false','message' => 'there is no customer in this name'));
             }
         }
         $this->db->where("customer_id", $customer_id);
@@ -120,7 +119,7 @@ class BookingModel
             if ($customerName == $customer['name']) {
                 $customer_id = $customer['id'];
             } else {
-                echo "there is no customer in this name";
+                echo json_encode(array('status' => 'false','message' => 'there is no customer in this name'));
             }
         }
         $this->db->Where('customer_id', $customer_id);
@@ -143,7 +142,7 @@ class BookingModel
             if ($hotelName == $hotel['name']) {
                 $hotel_id = $hotel['id'];
             } else {
-                echo "there is no hotel in this name";
+                echo json_encode(array('status' => 'false','message' => 'there is no hotel in this name'));
             }
         }
         $this->db->Where('hotel_id', $hotel_id);
@@ -166,7 +165,7 @@ class BookingModel
             if ($customerName == $customer['name']) {
                 $customer_id = $customer['id'];
             } else {
-                echo "there is no customer in this name!!";
+                echo json_encode(array('status' => 'false','message' => 'there is no customer in this name'));
             }
         }
         $this->db->Where('customer_id', $customer_id);
@@ -184,7 +183,7 @@ class BookingModel
             if ($hotelName == $hotel['name']) {
                 $hotel_id = $hotel['id'];
             } else {
-                echo "there is no hotel in this name";
+                echo json_encode(array('status' => 'false','message' => 'there is no hotel in this name'));
             }
         }
         $this->db->Where('hotel_id', $hotel_id);
