@@ -3,9 +3,9 @@ class CompaniesController
 {
     private $model;
 
-    public function __construct($model)
+    public function __construct($db)
     {
-        $this->model = $model;
+        $this->model = new CompaniesModel($db);
     }
     public function allCompanies()
     {

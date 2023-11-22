@@ -3,9 +3,9 @@ class HotelsController
 {
     private $model;
 
-    public function __construct($model)
+    public function __construct($db)
     {
-        $this->model = $model;
+        $this->model = new hotelsModel($db);
     }
     public function getHotelCity($city_id)
     {

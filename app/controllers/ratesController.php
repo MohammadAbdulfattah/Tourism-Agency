@@ -112,11 +112,11 @@ class RatesController
     public function addRates()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $customer_id = $_POST['customer_id'];
-            $hotel_id = $_POST['hotel_id'];
-            $comment = $_POST['comment'];
-            $star = $_POST['star'];
-            if(($star + 0) > 5){
+            $customer_id = @$_POST['customer_id'];
+            $hotel_id = @$_POST['hotel_id'];
+            $comment = @$_POST['comment'];
+            $star = @$_POST['star'];
+            if(($star) > 5){
                 echo json_encode(array('status' => 'false', 'messege' => 'Rate Star Must be Less than 5'));
                 return;
             }
